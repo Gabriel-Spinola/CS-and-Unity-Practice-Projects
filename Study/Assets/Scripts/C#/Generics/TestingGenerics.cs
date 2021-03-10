@@ -72,7 +72,7 @@ public class EnemyMinion : IEnemy<float>
 {
     public void Demage(float t)
     {
-        Debug.Log("EnemyMinion.Demage()");
+        Debug.Log($"EnemyMinion.Demage({ t }f)");
     }
 }
 
@@ -81,6 +81,6 @@ public class EnemyArcher : IEnemy<float>
 {
     public void Demage(float t)
     {
-        Debug.Log("EnemyArcher.Demage()");
+        Debug.Log($"EnemyArcher.Demage({ t }f)");
     }
 }
