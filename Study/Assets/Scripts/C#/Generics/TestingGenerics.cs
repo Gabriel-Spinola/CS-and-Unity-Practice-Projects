@@ -51,7 +51,7 @@ public class TestingGenerics : MonoBehaviour
 
 // Adding constraints to the T generic (you can use the constraints: class, struct, new() and etc
 // Just use T if its implements the IEnemy interface
-public class MyClass<T> where T : class, IEnemy<float>
+public class MyClass<T> where T : class, IEnemy<float>, new()
 {
     public T value;
 
@@ -73,6 +73,7 @@ public interface IEnemy<T>
     void Demage(T t);
 }
 
+// Implements the enemy interface and pass its generic type
 public class EnemyMinion : IEnemy<float>
 {
     public void Demage(float t)
@@ -81,6 +82,7 @@ public class EnemyMinion : IEnemy<float>
     }
 }
 
+// Implements the enemy interface and pass its generic type
 public class EnemyArcher : IEnemy<float>
 {
     public void Demage(float t)
