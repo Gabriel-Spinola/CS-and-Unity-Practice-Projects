@@ -27,14 +27,8 @@ public class TestingGenerics : MonoBehaviour
         MyClass<EnemyArcher> myClass2 = new MyClass<EnemyArcher>(new EnemyArcher());
     }
 
-    /// <summary>
-    /// The Generic Signature makes the type of the fuction something like auto in c++,
-    /// or a normal variable in javascript
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="firstElement"></param>
-    /// <param name="secondElement"></param>
-    /// <returns></returns>
+    // The Generic Signature makes the type of the fuction something like auto in c++,
+    // or a normal variable in javascript
     private T[] CreateArray<T>(T firstElement, T secondElement)
     {
         return new T[] {
