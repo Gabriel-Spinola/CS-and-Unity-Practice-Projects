@@ -49,15 +49,15 @@ public class TestingGenerics : MonoBehaviour
     }
 }
 
-// Adding constraints to the T generic
+// Adding constraints to the T generic (you can use the constraints: class, struct, new() and etc
 // Just use T if its implements the IEnemy interface
-public class MyClass<T> where T : IEnemy
+public class MyClass<T> where T : class, IEnemy<float>
 {
     public T value;
 
     public MyClass(T value)
     {
-        value.Demage();
+        value.Demage(10.5f);
     }
 
     private T[] CreateArray(T firstElement, T secondElement)
@@ -68,22 +68,22 @@ public class MyClass<T> where T : IEnemy
     }
 }
 
-public interface IEnemy
+public interface IEnemy<T>
 {
-    void Demage();
+    void Demage(T t);
 }
 
-public class EnemyMinion : IEnemy
+public class EnemyMinion : IEnemy<float>
 {
-    public void Demage()
+    public void Demage(float t)
     {
         Debug.Log("EnemyMinion.Demage()");
     }
 }
 
-public class EnemyArcher : IEnemy
+public class EnemyArcher : IEnemy<float>
 {
-    public void Demage()
+    public void Demage(float t)
     {
         Debug.Log("EnemyArcher.Demage()");
     }
