@@ -3,10 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using TMPro;
+
 public class Player : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator animator;
+    [SerializeField] private TMP_Text collectableType;
+    [SerializeField] private TMP_Text collectableCounter;
+
     [SerializeField] private LayerMask whatIsGround;
 
     [SerializeField] private float moveSpeed;
@@ -32,11 +37,6 @@ public class Player : MonoBehaviour
 
     bool jumpKey;
 
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
-
     private void Update()
     {
         xAxis = Input.GetAxisRaw("Horizontal");
@@ -44,6 +44,7 @@ public class Player : MonoBehaviour
 
         FlipSprite();
         Animation();
+        UpdateUI();
     }
 
     private void FixedUpdate()
@@ -99,6 +100,12 @@ public class Player : MonoBehaviour
         else {
             animState = EANIM_STATES.IDLE;
         }
+    }
+
+    private void UpdateUI()
+    {
+        collectableType.SetText("Cherries: ");
+        collectableCounter.SetText(cherries.ToString());
     }
 
     private void FlipSprite() => transform.localScale = xAxis < 0 ? new Vector2(-1f, 1f) : (xAxis > 0 ? new Vector2(1f, 1f) : new Vector2(transform.localScale.x, 1f));
