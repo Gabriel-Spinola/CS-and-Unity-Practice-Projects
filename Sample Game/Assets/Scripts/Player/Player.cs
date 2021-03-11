@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float jumpForce;
 
-    [SerializeField] private float HitForce;
+    [SerializeField] private float hitForce;
 
     private enum EANIM_STATES 
     { 
@@ -146,10 +146,14 @@ public class Player : MonoBehaviour
                 // Enemy is to my right therefore i should be demaged and move left
                 if (col.gameObject.transform.position.x > transform.position.x) {
                     health--;
+
+                    rb.AddForce(new Vector2(-hitForce, hitForce), ForceMode2D.Impulse);
                 }
                 // Enemy is to my left therefore i should be demaged and move right
                 else {
                     health--;
+
+                    rb.AddForce(new Vector2(hitForce, hitForce), ForceMode2D.Impulse);
                 }
             }
         }
