@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2132074118122963205}
   - component: {fileID: 2132074118122963206}
   - component: {fileID: 2132074118122963207}
-  - component: {fileID: 2132074118122963192}
   - component: {fileID: 2132074118122963204}
   - component: {fileID: 2132074118122963203}
   m_Layer: 0
@@ -120,7 +119,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.002655983, y: -0.7078345}
+  m_Offset: {x: -0.002655983, y: -0.368006}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -131,24 +130,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9483776, y: 0.509068}
+  m_Size: {x: 0.9483776, y: 1.188725}
   m_EdgeRadius: 0
---- !u!58 &2132074118122963192
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2132074118122963194}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.04, y: -0.15}
-  serializedVersion: 2
-  m_Radius: 0.4224348
 --- !u!114 &2132074118122963204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,7 +151,7 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
-  health: 2
+  health: 3
   moveSpeed: 900
   maxSpeed: 15
   counterMovement: 55

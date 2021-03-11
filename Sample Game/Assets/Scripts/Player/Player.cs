@@ -50,16 +50,21 @@ public class Player : MonoBehaviour
 
         simpleState = rb.velocity.y < 0 ? EANIM_STATES.FALLING : EANIM_STATES.IDLE;
 
-        FlipSprite();
+        if (animState != EANIM_STATES.HURT) {
+            FlipSprite();
+        }
+
         Animation();
         UpdateUI();
     }
 
     private void FixedUpdate()
     {
-        Movement();
-        CounterMovement();
-        Jump();
+        if (animState != EANIM_STATES.HURT) {
+            Movement();
+            CounterMovement();
+            Jump();
+        } 
     }
 
     private void Movement()
@@ -107,6 +112,11 @@ public class Player : MonoBehaviour
         else if (xAxis > 0 || xAxis < 0) {
             animState = EANIM_STATES.RUN;
         }
+        else if (animState == EANIM_STATES.HURT) {
+            if(rb.velocity.x < Mathf.Epsilon) {
+                animState = EANIM_STATES.IDLE;
+            }
+        }
         else {
             animState = EANIM_STATES.IDLE;
         }
@@ -146,6 +156,8 @@ public class Player : MonoBehaviour
                 });
             }
             else {
+                animState = EANIM_STATES.HURT;
+
                 // Enemy is to my right therefore i should be demaged and move left
                 if (col.gameObject.transform.position.x > transform.position.x) {
                     health--;
