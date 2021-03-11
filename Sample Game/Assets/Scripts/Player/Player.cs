@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -69,10 +70,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void FlipSprite()
-    {
-        transform.localScale = xAxis < 0 ? new Vector2(-1f, 1f) : (xAxis > 0 ? new Vector2(1f, 1f) : new Vector2(transform.localScale.x, 1f));
-    }
+    private void FlipSprite() => transform.localScale = xAxis < 0 ? new Vector2(-1f, 1f) : (xAxis > 0 ? new Vector2(1f, 1f) : new Vector2(transform.localScale.x, 1f));
 
     private bool CanJump() => Physics2D.Raycast(transform.position, Vector3.down, 1f, whatIsGround);
 }
