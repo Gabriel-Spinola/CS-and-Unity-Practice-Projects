@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float jumpForce;
 
+    public int cherries;
+
     private enum EANIM_STATES 
     { 
         IDLE = 0,
@@ -102,4 +104,13 @@ public class Player : MonoBehaviour
     private void FlipSprite() => transform.localScale = xAxis < 0 ? new Vector2(-1f, 1f) : (xAxis > 0 ? new Vector2(1f, 1f) : new Vector2(transform.localScale.x, 1f));
 
     private bool CanJump() => Physics2D.Raycast(transform.position, Vector3.down, .98f, whatIsGround);
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.tag == "Collectable-Cherry") {
+            cherries++;
+
+            Destroy(col.gameObject);
+        }
+    }
 }

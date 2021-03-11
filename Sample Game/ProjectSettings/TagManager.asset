@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Collectable-Cherry
   layers:
   - Default
   - TransparentFX
@@ -13,7 +14,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Ground
   - 
   - 
   - 
@@ -40,4 +41,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 1993298125
+    locked: 0
+  - name: Entities
+    uniqueID: 3607270813
+    locked: 0
+  - name: Foreground
+    uniqueID: 1528914473
+    locked: 0
+  - name: Props
+    uniqueID: 3607712967
     locked: 0
