@@ -54,7 +54,7 @@ public class Player : MonoBehaviour
             FlipSprite();
         }
 
-        Animation();
+        StartCoroutine(Animation());
         UpdateUI();
     }
 
@@ -100,20 +100,26 @@ public class Player : MonoBehaviour
         Callback?.Invoke();
     }
 
-    private void Animation()
+    private IEnumerator Animation()
     {
         animator.SetInteger("state", (int) animState);
 
-        if(animState == EANIM_STATES.JUMP && CanJump()) {
+        if(animState == EANIM_STATES.JUMP && CanJump() && animState != EANIM_STATES.HURT) {
             animState = EANIM_STATES.IDLE;
         }
 
-        if (animState == EANIM_STATES.JUMP){}
+        if (animState == EANIM_STATES.JUMP){
+            yield return new WaitForSeconds(.25f);
+        }
         else if (xAxis > 0 || xAxis < 0) {
             animState = EANIM_STATES.RUN;
         }
         else if (animState == EANIM_STATES.HURT) {
-            if(rb.velocity.x < Mathf.Epsilon) {
+            yield return new WaitForSeconds(.25f);
+
+            if (rb.velocity.x >= Mathf.Epsilon) {
+                yield return new WaitForSeconds(.8f);
+
                 animState = EANIM_STATES.IDLE;
             }
         }
