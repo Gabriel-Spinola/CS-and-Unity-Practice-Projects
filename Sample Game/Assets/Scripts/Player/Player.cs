@@ -90,7 +90,7 @@ public class Player : MonoBehaviour
             animState = EANIM_STATES.IDLE;
         }
 
-        if (animState == EANIM_STATES.JUMP && CanJump()) { }
+        if (animState == EANIM_STATES.JUMP){}
         else if (xAxis > 0 || xAxis < 0) {
             animState = EANIM_STATES.RUN;
         }
