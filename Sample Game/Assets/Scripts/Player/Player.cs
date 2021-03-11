@@ -22,13 +22,14 @@ public class Player : MonoBehaviour
 
     private enum EANIM_STATES 
     { 
-        IDLE = 0,
-        RUN  = 1,
-        JUMP = 2,
-        FALL = 3,
+        IDLE    = 0,
+        RUN     = 1,
+        JUMP    = 2,
+        FALLING = 3,
     };
 
     private EANIM_STATES animState = EANIM_STATES.IDLE;
+    private EANIM_STATES simpelState = EANIM_STATES.IDLE;
 
     private float threshold = 0.03f;
     private float xAxis;
@@ -41,6 +42,8 @@ public class Player : MonoBehaviour
     {
         xAxis = Input.GetAxisRaw("Horizontal");
         jumpKey = Input.GetKeyDown(KeyCode.Space) | Input.GetKey(KeyCode.Space);
+
+        simpelState = rb.velocity.y < 0 ? EANIM_STATES.FALLING : EANIM_STATES.IDLE;
 
         FlipSprite();
         Animation();
@@ -75,7 +78,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Jump()
+    private void Jump(Action Callback = null)
     {
         if (jumpKey && CanJump()) {
             rb.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime * 6f, ForceMode2D.Impulse);
@@ -83,6 +86,8 @@ public class Player : MonoBehaviour
 
             return;
         }
+
+        Callback?.Invoke();
     }
 
     private void Animation()
@@ -118,6 +123,22 @@ public class Player : MonoBehaviour
             cherries++;
 
             Destroy(col.gameObject);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Enemies-Frog" && simpelState == EANIM_STATES.FALLING) {
+            Destroy(col.gameObject);
+
+            Jump(() => {
+                rb.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime * 6f, ForceMode2D.Impulse);
+                animState = EANIM_STATES.JUMP;
+            });
+        }
+
+        if (col.gameObject.layer == 9) {
+            // Die
         }
     }
 }
