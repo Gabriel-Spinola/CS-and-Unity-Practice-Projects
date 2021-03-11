@@ -1,2 +1,2 @@
-# Study C# for Unty
+# c# and Unity Practice Projects
  
