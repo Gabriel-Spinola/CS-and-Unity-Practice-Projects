@@ -15,20 +15,24 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float jumpForce;
 
+    private enum EANIM_STATES 
+    { 
+        IDLE = 0,
+        RUN  = 1,
+        JUMP = 2,
+        FALL = 3,
+    };
+
+    private EANIM_STATES animState = EANIM_STATES.IDLE;
+
+    float threshold = 0.03f;
     float xAxis;
 
     bool jumpKey;
 
-    float threshold = 0.03f;
-
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-    }
-
-    private void OnEnable()
-    {
-        animator.SetBool("isRunning", false);
     }
 
     private void Update()
@@ -72,6 +76,7 @@ public class Player : MonoBehaviour
     {
         if (jumpKey && CanJump()) {
             rb.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime * 6f, ForceMode2D.Impulse);
+            animState = EANIM_STATES.JUMP;
 
             return;
         }
@@ -79,13 +84,22 @@ public class Player : MonoBehaviour
 
     private void Animation()
     {
-        if (xAxis < 0 || xAxis > 0)
-            animator.SetBool("isRunning", true);
-        else
-            animator.SetBool("isRunning", false);
+        animator.SetInteger("state", (int) animState);
+
+        if(animState == EANIM_STATES.JUMP && CanJump()) {
+            animState = EANIM_STATES.IDLE;
+        }
+
+        if (animState == EANIM_STATES.JUMP && CanJump()) { }
+        else if (xAxis > 0 || xAxis < 0) {
+            animState = EANIM_STATES.RUN;
+        }
+        else {
+            animState = EANIM_STATES.IDLE;
+        }
     }
 
     private void FlipSprite() => transform.localScale = xAxis < 0 ? new Vector2(-1f, 1f) : (xAxis > 0 ? new Vector2(1f, 1f) : new Vector2(transform.localScale.x, 1f));
 
-    private bool CanJump() => Physics2D.Raycast(transform.position, Vector3.down, 1f, whatIsGround);
+    private bool CanJump() => Physics2D.Raycast(transform.position, Vector3.down, .98f, whatIsGround);
 }
