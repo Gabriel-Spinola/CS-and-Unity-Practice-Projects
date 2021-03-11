@@ -1,2 +1,2 @@
-# c# and Unity Practice Projects
+# C# and Unity Practice Projects
  
