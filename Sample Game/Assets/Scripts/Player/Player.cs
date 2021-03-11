@@ -20,8 +20,6 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float jumpForce;
 
-    public int cherries;
-
     private enum EANIM_STATES 
     { 
         IDLE = 0,
@@ -32,10 +30,12 @@ public class Player : MonoBehaviour
 
     private EANIM_STATES animState = EANIM_STATES.IDLE;
 
-    float threshold = 0.03f;
-    float xAxis;
+    private float threshold = 0.03f;
+    private float xAxis;
 
-    bool jumpKey;
+    private int cherries = 0;
+
+    private bool jumpKey;
 
     private void Update()
     {
