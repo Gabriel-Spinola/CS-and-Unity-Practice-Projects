@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Frog : MonoBehaviour
 {
+    [SerializeField] private float leftMaxDistance;
+    [SerializeField] private float rightMaxDistance;
+
+    private bool isFacingLeft = true;
+
     private void Start()
     {
         
