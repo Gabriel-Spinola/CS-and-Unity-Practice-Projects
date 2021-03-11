@@ -14,11 +14,15 @@ public class Player : MonoBehaviour
 
     [SerializeField] private LayerMask whatIsGround;
 
+    [SerializeField] private int health;
+
     [SerializeField] private float moveSpeed;
     [SerializeField] private float maxSpeed;
     [SerializeField] private float counterMovement;
 
     [SerializeField] private float jumpForce;
+
+    [SerializeField] private float HitForce;
 
     private enum EANIM_STATES 
     { 
@@ -26,10 +30,11 @@ public class Player : MonoBehaviour
         RUN     = 1,
         JUMP    = 2,
         FALLING = 3,
+        HURT    = 4,
     };
 
     private EANIM_STATES animState = EANIM_STATES.IDLE;
-    private EANIM_STATES simpelState = EANIM_STATES.IDLE;
+    private EANIM_STATES simpleState = EANIM_STATES.IDLE;
 
     private float threshold = 0.03f;
     private float xAxis;
@@ -43,7 +48,7 @@ public class Player : MonoBehaviour
         xAxis = Input.GetAxisRaw("Horizontal");
         jumpKey = Input.GetKeyDown(KeyCode.Space) | Input.GetKey(KeyCode.Space);
 
-        simpelState = rb.velocity.y < 0 ? EANIM_STATES.FALLING : EANIM_STATES.IDLE;
+        simpleState = rb.velocity.y < 0 ? EANIM_STATES.FALLING : EANIM_STATES.IDLE;
 
         FlipSprite();
         Animation();
@@ -128,20 +133,31 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "Enemies-Frog" && simpelState == EANIM_STATES.FALLING) {
-            Destroy(col.gameObject);
+        if (col.gameObject.CompareTag("Enemies-Frog")) {
+            if (simpleState == EANIM_STATES.FALLING) {
+                Destroy(col.gameObject);
 
-            Jump(() => {
-                rb.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime * 6f, ForceMode2D.Impulse);
-                animState = EANIM_STATES.JUMP;
-            });
-        }
-        else if (col.gameObject.tag == "Enemies-Frog") {
-            // Die
+                Jump(() => {
+                    rb.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime * 6f, ForceMode2D.Impulse);
+                    animState = EANIM_STATES.JUMP;
+                });
+            }
+            else {
+                // Enemy is to my right therefore i should be demaged and move left
+                if (col.gameObject.transform.position.x > transform.position.x) {
+                    health--;
+                }
+                // Enemy is to my left therefore i should be demaged and move right
+                else {
+                    health--;
+                }
+            }
         }
 
         if (col.gameObject.layer == 9) {
             // Die
         }
     }
+
+    //private void Die() => health >= 0 ? : return; 
 }
