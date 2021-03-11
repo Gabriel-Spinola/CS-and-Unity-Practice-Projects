@@ -136,6 +136,9 @@ public class Player : MonoBehaviour
                 animState = EANIM_STATES.JUMP;
             });
         }
+        else if (col.gameObject.tag == "Enemies-Frog") {
+            // Die
+        }
 
         if (col.gameObject.layer == 9) {
             // Die
