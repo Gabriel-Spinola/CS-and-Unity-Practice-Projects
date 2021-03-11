@@ -6,6 +6,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Animator animator;
     [SerializeField] private LayerMask whatIsGround;
 
     [SerializeField] private float moveSpeed;
@@ -25,12 +26,18 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    private void OnEnable()
+    {
+        animator.SetBool("isRunning", false);
+    }
+
     private void Update()
     {
         xAxis = Input.GetAxisRaw("Horizontal");
         jumpKey = Input.GetKeyDown(KeyCode.Space) | Input.GetKey(KeyCode.Space);
 
         FlipSprite();
+        Animation();
     }
 
     private void FixedUpdate()
@@ -68,6 +75,14 @@ public class Player : MonoBehaviour
 
             return;
         }
+    }
+
+    private void Animation()
+    {
+        if (xAxis < 0 || xAxis > 0)
+            animator.SetBool("isRunning", true);
+        else
+            animator.SetBool("isRunning", false);
     }
 
     private void FlipSprite() => transform.localScale = xAxis < 0 ? new Vector2(-1f, 1f) : (xAxis > 0 ? new Vector2(1f, 1f) : new Vector2(transform.localScale.x, 1f));
