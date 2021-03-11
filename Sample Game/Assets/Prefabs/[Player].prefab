@@ -163,13 +163,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 2132074118122963206}
   animator: {fileID: 2132074118122963203}
+  collectableType: {fileID: 0}
+  collectableCounter: {fileID: 0}
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
+  health: 2
   moveSpeed: 900
   maxSpeed: 15
   counterMovement: 55
   jumpForce: 100
+  hitForce: 8
 --- !u!95 &2132074118122963203
 Animator:
   serializedVersion: 3

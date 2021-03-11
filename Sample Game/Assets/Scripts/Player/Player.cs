@@ -39,14 +39,14 @@ public class Player : MonoBehaviour
     private float threshold = 0.03f;
     private float xAxis;
 
-    private int cherries = 0;
+    private int cherriesUI = 0;
 
     private bool jumpKey;
 
     private void Update()
     {
         xAxis = Input.GetAxisRaw("Horizontal");
-        jumpKey = Input.GetKeyDown(KeyCode.Space) | Input.GetKey(KeyCode.Space);
+        jumpKey = Input.GetKeyDown(KeyCode.Space) || Input.GetKey(KeyCode.Space);
 
         simpleState = rb.velocity.y < 0 ? EANIM_STATES.FALLING : EANIM_STATES.IDLE;
 
@@ -115,7 +115,7 @@ public class Player : MonoBehaviour
     private void UpdateUI()
     {
         collectableType.SetText("Cherries: ");
-        collectableCounter.SetText(cherries.ToString());
+        collectableCounter.SetText(cherriesUI.ToString());
     }
 
     private void FlipSprite() => transform.localScale = xAxis < 0 ? new Vector2(-1f, 1f) : (xAxis > 0 ? new Vector2(1f, 1f) : new Vector2(transform.localScale.x, 1f));
@@ -125,9 +125,12 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.tag == "Collectable-Cherry") {
-            cherries++;
+            cherriesUI++;
 
+            Heal(1);
             Destroy(col.gameObject);
+
+            return;
         }
     }
 
@@ -163,5 +166,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    //private void Die() => health >= 0 ? : return; 
+    //private void Die() => health >= 0 ? : return;
+    private void Heal(int lifePoints) => health += health < 3 ? lifePoints : 0;
 }
