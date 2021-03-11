@@ -39,8 +39,8 @@ public class Player : MonoBehaviour
 
     private void Movement()
     {
-        if (rb.velocity.magnitude >= maxSpeed)
-            return;
+        if (rb.velocity.x >= maxSpeed) xAxis = 0;
+        if (rb.velocity.x <=-maxSpeed) xAxis = 0;
 
         rb.AddForce(xAxis * transform.right * moveSpeed * Time.fixedDeltaTime, ForceMode2D.Force);
     }
@@ -54,14 +54,14 @@ public class Player : MonoBehaviour
             ( Mathf.Abs(rb.velocity.x) >= threshold && xAxis == 0 ) ||
             ( Mathf.Abs(rb.velocity.x) <= threshold && xAxis == 0 )
         ) {
-            rb.AddForce(transform.right * -rb.velocity.x * Time.fixedDeltaTime * counterMovement);
+            rb.AddForce(transform.right * -rb.velocity.x * Time.fixedDeltaTime * counterMovement, ForceMode2D.Force);
         }
     }
 
     private void Jump()
     {
         if (jumpKey && CanJump()) {
-            rb.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime * 6f, ForceMode2D.Force);
+            rb.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime * 6f, ForceMode2D.Impulse);
 
             return;
         }
