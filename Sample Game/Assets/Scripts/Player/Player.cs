@@ -28,6 +28,8 @@ public class Player : MonoBehaviour
     {
         xAxis = Input.GetAxisRaw("Horizontal");
         jumpKey = Input.GetKeyDown(KeyCode.Space) | Input.GetKey(KeyCode.Space);
+
+        FlipSprite();
     }
 
     private void FixedUpdate()
@@ -65,6 +67,11 @@ public class Player : MonoBehaviour
 
             return;
         }
+    }
+
+    private void FlipSprite()
+    {
+        transform.localScale = xAxis < 0 ? new Vector2(-1f, 1f) : (xAxis > 0 ? new Vector2(1f, 1f) : new Vector2(transform.localScale.x, 1f));
     }
 
     private bool CanJump() => Physics2D.Raycast(transform.position, Vector3.down, 1f, whatIsGround);
