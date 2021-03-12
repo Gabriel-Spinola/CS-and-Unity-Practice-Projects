@@ -10,11 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7547740634875178405}
   - component: {fileID: 7547740634875178403}
-  - component: {fileID: 7547740634875178404}
   - component: {fileID: 1250059136069979641}
   - component: {fileID: 555099518}
   - component: {fileID: 555099519}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Frog
   m_TagString: Enemies-Frog
   m_Icon: {fileID: 0}
@@ -85,22 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &7547740634875178404
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7547740634875178406}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.052769303, y: -0.075077295}
-  serializedVersion: 2
-  m_Radius: 0.5945679
 --- !u!95 &1250059136069979641
 Animator:
   serializedVersion: 3
@@ -153,11 +136,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86437bc35ab66364c99096b99d001d6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 555099518}
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
-  leftMaxDistance: 17.32
-  rightMaxDistance: 30.19
-  jumpLength: 100
-  jumpHeight: 100
+  leftMaxDistance: 43
+  rightMaxDistance: 57
+  jumpLength: 5
+  jumpHeight: 5.5
+  isFacingLeft: 1

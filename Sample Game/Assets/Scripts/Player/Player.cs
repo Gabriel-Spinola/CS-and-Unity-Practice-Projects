@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField] private TMP_Text collectableCounter;
 
     [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private LayerMask whatIsEnemy;
 
     [SerializeField] private int health;
 
@@ -147,7 +148,7 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Enemies-Frog")) {
-            if (simpleState == EANIM_STATES.FALLING) {
+            if (Physics2D.Raycast(transform.position, Vector3.down, 1.2f, whatIsEnemy)) {
                 Destroy(col.gameObject);
 
                 Jump(() => {
