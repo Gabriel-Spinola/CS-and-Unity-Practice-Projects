@@ -23,31 +23,21 @@ public class Frog : MonoBehaviour
         col = GetComponent<Collider2D>();   
     }
 
-    private void Update()
-    {
-        Animation();
-    }
-
     private void FixedUpdate()
-    {
-        Movement();
-    }
-
-    private void Movement()
     {
         if (isFacingLeft) {
             if (transform.position.x > leftMaxDistance) {
+                // Check if the next jump will make him transpass the limits
+                if (transform.position.x - jumpLength <= leftMaxDistance) {
+                    isFacingLeft = false;
+                }
+
                 if (transform.localScale.x != 1) {
                     transform.localScale = new Vector3(1f, 1f, 1f);
                 }
 
                 if (col.IsTouchingLayers(whatIsGround)) {
                     rb.velocity = new Vector2(-jumpLength, jumpHeight);
-                }
-
-                // Check if the next jump will push you over the limits
-                if (transform.position.x + ( ( jumpLength + jumpHeight ) / Time.fixedDeltaTime ) <= leftMaxDistance) {
-                    isFacingLeft = true;
                 }
             }
             else {
@@ -56,17 +46,17 @@ public class Frog : MonoBehaviour
         }
         else {
             if (transform.position.x < rightMaxDistance) {
+                // Check if the next jump will make him transpass the limits
+                if (transform.position.x + jumpLength >= rightMaxDistance) {
+                    isFacingLeft = true;
+                }
+
                 if (transform.localScale.x != -1) {
                     transform.localScale = new Vector3(-1f, 1f, 1f);
                 }
 
                 if (col.IsTouchingLayers(whatIsGround)) {
                     rb.velocity = new Vector2(jumpLength, jumpHeight);
-                }
-
-                // Check if the next jump will push you over the limits
-                if (transform.position.x - ( ( jumpLength + jumpHeight ) / Time.fixedDeltaTime ) >= rightMaxDistance) {
-                    isFacingLeft = true;
                 }
             }
             else {
@@ -75,8 +65,4 @@ public class Frog : MonoBehaviour
         }
     }
 
-    private void Animation()
-    {
-
-    }
 }
