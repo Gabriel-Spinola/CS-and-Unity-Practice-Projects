@@ -134,10 +134,6 @@ public class Player : MonoBehaviour
         collectableCounter.SetText(cherriesUI.ToString());
     }
 
-    private void FlipSprite() => transform.localScale = xAxis < 0 ? new Vector2(-1f, 1f) : (xAxis > 0 ? new Vector2(1f, 1f) : new Vector2(transform.localScale.x, 1f));
-
-    private bool CanJump() => Physics2D.Raycast(transform.position, Vector3.down, .98f, whatIsGround);
-
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.tag == "Collectable-Cherry") {
@@ -183,6 +179,10 @@ public class Player : MonoBehaviour
             // Die
         }
     }
+
+    private void FlipSprite() => transform.localScale = xAxis < 0 ? new Vector2(-1f, 1f) : ( xAxis > 0 ? new Vector2(1f, 1f) : new Vector2(transform.localScale.x, 1f) );
+
+    private bool CanJump() => Physics2D.Raycast(transform.position, Vector3.down, .98f, whatIsGround);
 
     //private void Die() => health >= 0 ? : return;
     private void Heal(int lifePoints) => health += health < 3 ? lifePoints : 0;
