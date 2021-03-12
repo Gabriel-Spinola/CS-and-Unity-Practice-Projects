@@ -25,6 +25,11 @@ public class Frog : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Movement();
+    }
+
+    private void Movement()
+    {
         if (isFacingLeft) {
             if (transform.position.x > leftMaxDistance) {
                 // Check if the next jump will make him transpass the limits
@@ -64,5 +69,4 @@ public class Frog : MonoBehaviour
             }
         }
     }
-
 }
