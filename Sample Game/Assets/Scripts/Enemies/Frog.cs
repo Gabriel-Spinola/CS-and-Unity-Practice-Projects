@@ -45,7 +45,7 @@ public class Frog : MonoBehaviour
                     rb.velocity = new Vector2(-jumpLength, jumpHeight);
                 }
 
-                // Check if the next jump will make him transpass the limits
+                // Check if the next jump will push you over the limits
                 if (transform.position.x + ( ( jumpLength + jumpHeight ) / Time.fixedDeltaTime ) <= leftMaxDistance) {
                     isFacingLeft = true;
                 }
@@ -64,7 +64,7 @@ public class Frog : MonoBehaviour
                     rb.velocity = new Vector2(jumpLength, jumpHeight);
                 }
 
-                // Check if the next jump will make him transpass the limits
+                // Check if the next jump will push you over the limits
                 if (transform.position.x - ( ( jumpLength + jumpHeight ) / Time.fixedDeltaTime ) >= rightMaxDistance) {
                     isFacingLeft = true;
                 }
