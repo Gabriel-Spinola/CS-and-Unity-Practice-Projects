@@ -23,7 +23,17 @@ public class Frog : MonoBehaviour
         col = GetComponent<Collider2D>();   
     }
 
+    private void Update()
+    {
+        Animation();
+    }
+
     private void FixedUpdate()
+    {
+        Movement();
+    }
+
+    private void Movement()
     {
         if (isFacingLeft) {
             if (transform.position.x > leftMaxDistance) {
@@ -55,7 +65,7 @@ public class Frog : MonoBehaviour
                 }
 
                 // Check if the next jump will make him transpass the limits
-                if (transform.position.x - ((jumpLength + jumpHeight) / Time.fixedDeltaTime) >= rightMaxDistance) {
+                if (transform.position.x - ( ( jumpLength + jumpHeight ) / Time.fixedDeltaTime ) >= rightMaxDistance) {
                     isFacingLeft = true;
                 }
             }
@@ -63,5 +73,10 @@ public class Frog : MonoBehaviour
                 isFacingLeft = true;
             }
         }
+    }
+
+    private void Animation()
+    {
+
     }
 }
