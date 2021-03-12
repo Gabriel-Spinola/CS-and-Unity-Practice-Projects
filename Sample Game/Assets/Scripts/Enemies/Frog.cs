@@ -6,11 +6,11 @@ public class Frog : MonoBehaviour
 {
     [SerializeField] private LayerMask whatIsGround;
 
-    [SerializeField] private float leftMaxDistance;
-    [SerializeField] private float rightMaxDistance;
+    [SerializeField] private float leftMaxDistance = 0f;
+    [SerializeField] private float rightMaxDistance = 0f;
 
-    [SerializeField] private float jumpLength;
-    [SerializeField] private float jumpHeight;
+    [SerializeField] private float jumpLength = 0f;
+    [SerializeField] private float jumpHeight = 0f;
 
     private Rigidbody2D rb;
     private Collider2D col;
