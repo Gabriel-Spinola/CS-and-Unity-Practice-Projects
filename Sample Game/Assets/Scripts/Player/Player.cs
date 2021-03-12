@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
     };
 
     private EANIM_STATES animState = EANIM_STATES.IDLE;
-    private EANIM_STATES simpleState = EANIM_STATES.IDLE;
+    [SerializeField] private EANIM_STATES simpleState = EANIM_STATES.IDLE;
 
     private float threshold = 0.03f;
     private float xAxis;
@@ -115,11 +115,9 @@ public class Player : MonoBehaviour
             animState = EANIM_STATES.RUN;
         }
         else if (animState == EANIM_STATES.HURT) {
-            yield return new WaitForSeconds(.25f);
+            yield return new WaitForSeconds(.5f);
 
             if (rb.velocity.x >= Mathf.Epsilon) {
-                yield return new WaitForSeconds(.8f);
-
                 animState = EANIM_STATES.IDLE;
             }
         }
@@ -154,7 +152,6 @@ public class Player : MonoBehaviour
 
                 Jump(() => {
                     rb.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime * 6f, ForceMode2D.Impulse);
-                    animState = EANIM_STATES.JUMP;
                 });
             }
             else {

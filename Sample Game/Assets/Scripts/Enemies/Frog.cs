@@ -15,7 +15,7 @@ public class Frog : MonoBehaviour
     private Rigidbody2D rb;
     private Collider2D col;
 
-    private bool isFacingLeft = true;
+    [SerializeField] private bool isFacingLeft = true;
 
     private void Start()
     {
@@ -23,16 +23,36 @@ public class Frog : MonoBehaviour
         col = GetComponent<Collider2D>();   
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (isFacingLeft) {
-            if (transform.position.x >= leftMaxDistance) {
+            print(transform.position.x);
+
+            if (transform.position.x > leftMaxDistance) {
+                if (transform.localScale.x != 1) {
+                    transform.localScale = new Vector3(1f, 1f, 1f);
+                }
+
                 if (col.IsTouchingLayers(whatIsGround)) {
-                    //rb.AddForce();
+                    rb.velocity = new Vector2(-jumpLength, jumpHeight);
                 }
             }
             else {
                 isFacingLeft = false;
+            }
+        }
+        else {
+            if (transform.position.x < rightMaxDistance) {
+                if (transform.localScale.x != -1) {
+                    transform.localScale = new Vector3(-1f, 1f, 1f);
+                }
+
+                if (col.IsTouchingLayers(whatIsGround)) {
+                    rb.velocity = new Vector2(jumpLength, jumpHeight);
+                }
+            }
+            else {
+                isFacingLeft = true;
             }
         }
     }
