@@ -1150,6 +1150,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29adc71c640152048b3c69325df1d458, type: 3}
+--- !u!1 &2007723005 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7547740634875178406, guid: 5613527932d055041885c203bc36d643,
+    type: 3}
+  m_PrefabInstance: {fileID: 7547740634355992799}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &2007723009
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007723005}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.02791977, y: -0.111682415}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.1875, y: 2}
+    newSize: {x: 0.35, y: 0.32}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.3126526, y: 1.0320902}
+  m_EdgeRadius: 0
 --- !u!1 &2018838605
 GameObject:
   m_ObjectHideFlags: 0
@@ -1341,6 +1373,11 @@ PrefabInstance:
       propertyPath: collectableCounter
       value: 
       objectReference: {fileID: 1752978973}
+    - target: {fileID: 2132074118122963204, guid: 8ce86b524c37b8d45a996db3f7a45e80,
+        type: 3}
+      propertyPath: whatIsEnemy.m_Bits
+      value: 1024
+      objectReference: {fileID: 0}
     - target: {fileID: 2132074118122963207, guid: 8ce86b524c37b8d45a996db3f7a45e80,
         type: 3}
       propertyPath: m_Material
@@ -1355,31 +1392,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1465317103}
     m_Modifications:
-    - target: {fileID: 555099519, guid: 5613527932d055041885c203bc36d643, type: 3}
-      propertyPath: jumpLength
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 555099519, guid: 5613527932d055041885c203bc36d643, type: 3}
-      propertyPath: jumpHeight
-      value: 5.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 555099519, guid: 5613527932d055041885c203bc36d643, type: 3}
-      propertyPath: leftMaxDistance
-      value: 45
-      objectReference: {fileID: 0}
-    - target: {fileID: 555099519, guid: 5613527932d055041885c203bc36d643, type: 3}
-      propertyPath: rightMaxDistance
-      value: 57
-      objectReference: {fileID: 0}
     - target: {fileID: 7547740634875178405, guid: 5613527932d055041885c203bc36d643,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 23.89
+      value: 24.74
       objectReference: {fileID: 0}
     - target: {fileID: 7547740634875178405, guid: 5613527932d055041885c203bc36d643,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.23
+      value: -2.03
       objectReference: {fileID: 0}
     - target: {fileID: 7547740634875178405, guid: 5613527932d055041885c203bc36d643,
         type: 3}

@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using TMPro;
+using UnityEngine.SceneManagement;
+
 
 public class Player : MonoBehaviour
 {
@@ -51,12 +52,16 @@ public class Player : MonoBehaviour
 
         simpleState = rb.velocity.y < 0 ? EANIM_STATES.FALLING : EANIM_STATES.IDLE;
 
+        if (Input.GetKeyDown(KeyCode.R))
+            SceneManager.LoadScene("Game");
+
         if (animState != EANIM_STATES.HURT) {
             FlipSprite();
         }
 
         StartCoroutine(Animation());
         UpdateUI();
+        Die();
     }
 
     private void FixedUpdate()
@@ -174,7 +179,7 @@ public class Player : MonoBehaviour
         }
 
         if (col.gameObject.layer == 9) {
-            // Die
+            SceneManager.LoadScene("Game");
         }
     }
 
@@ -182,6 +187,7 @@ public class Player : MonoBehaviour
 
     private bool CanJump() => Physics2D.Raycast(transform.position, Vector3.down, .98f, whatIsGround);
 
-    //private void Die() => health >= 0 ? : return;
+    private void Die() { if (health <= 0) SceneManager.LoadScene("Game"); }
+
     private void Heal(int lifePoints) => health += health < 3 ? lifePoints : 0;
 }
