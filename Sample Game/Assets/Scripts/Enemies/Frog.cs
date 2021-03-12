@@ -26,8 +26,6 @@ public class Frog : MonoBehaviour
     private void FixedUpdate()
     {
         if (isFacingLeft) {
-            print(transform.position.x);
-
             if (transform.position.x > leftMaxDistance) {
                 if (transform.localScale.x != 1) {
                     transform.localScale = new Vector3(1f, 1f, 1f);
@@ -35,6 +33,11 @@ public class Frog : MonoBehaviour
 
                 if (col.IsTouchingLayers(whatIsGround)) {
                     rb.velocity = new Vector2(-jumpLength, jumpHeight);
+                }
+
+                // Check if the next jump will make him transpass the limits
+                if (transform.position.x + ( ( jumpLength + jumpHeight ) / Time.fixedDeltaTime ) <= leftMaxDistance) {
+                    isFacingLeft = true;
                 }
             }
             else {
@@ -49,6 +52,11 @@ public class Frog : MonoBehaviour
 
                 if (col.IsTouchingLayers(whatIsGround)) {
                     rb.velocity = new Vector2(jumpLength, jumpHeight);
+                }
+
+                // Check if the next jump will make him transpass the limits
+                if (transform.position.x - ((jumpLength + jumpHeight) / Time.fixedDeltaTime) >= rightMaxDistance) {
+                    isFacingLeft = true;
                 }
             }
             else {
