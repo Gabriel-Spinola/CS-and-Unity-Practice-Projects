@@ -14,19 +14,19 @@ public class Frog : Enemy
 
     [SerializeField] private bool isFacingLeft = true;
 
-    private Rigidbody2D rb;
     private Collider2D col;
 
     protected override void Awake()
     {
         base.Awake();
 
-        rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>(); 
     }
 
     private void Update()
     {
+        if (rb == null) return;
+
         if(animator.GetBool("isJumping")) {
             if (rb.velocity.y < .1f) {
                 animator.SetBool("isFalling", true);
@@ -53,8 +53,6 @@ public class Frog : Enemy
     {
         if (isFacingLeft) {
             if (transform.position.x > leftMaxDistance) {
-                
-
                 if (transform.localScale.x != 1) {
                     transform.localScale = new Vector3(1f, 1f, 1f);
                 }

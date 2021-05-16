@@ -159,7 +159,7 @@ public class Player : MonoBehaviour
                 enemy_.JumpedOn();
 
                 Jump(() => {
-                    rb.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime * 6f, ForceMode2D.Impulse);
+                    rb.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime * 2.5f, ForceMode2D.Impulse);
                 });
             }
             else {

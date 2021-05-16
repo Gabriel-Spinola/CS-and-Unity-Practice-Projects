@@ -5,10 +5,20 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     protected Animator animator;
+    protected Rigidbody2D rb;
 
-    public void JumpedOn() => animator.SetTrigger("whenDead");
+    protected virtual void Awake()
+    { 
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+    }
 
-    protected virtual void Awake() => animator = GetComponent<Animator>();
+    public void JumpedOn() 
+    {
+        Destroy(rb);
+
+        animator.SetTrigger("whenDead");
+    } 
 
     private void Die() {
         Destroy(gameObject);
