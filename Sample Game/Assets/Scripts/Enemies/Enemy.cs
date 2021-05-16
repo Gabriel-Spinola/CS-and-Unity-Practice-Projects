@@ -6,9 +6,9 @@ public class Enemy : MonoBehaviour
 {
     protected Animator animator;
 
-    protected virtual void Awake() => animator = GetComponent<Animator>();
-
     public void JumpedOn() => animator.SetTrigger("whenDead");
+
+    protected virtual void Awake() => animator = GetComponent<Animator>();
 
     private void Die() {
         Destroy(gameObject);
