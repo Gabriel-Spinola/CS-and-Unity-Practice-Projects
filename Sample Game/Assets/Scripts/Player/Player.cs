@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private TMP_Text collectableType;
     [SerializeField] private TMP_Text collectableCounter;
+    [SerializeField] private AudioSource footStep;
 
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private LayerMask whatIsEnemy;
@@ -182,6 +183,15 @@ public class Player : MonoBehaviour
 
         if (col.gameObject.layer == 9) {
             SceneManager.LoadScene("Game");
+        }
+    }
+
+    private void FootstepSound()
+    {
+        if (CanJump()) {
+            footStep.pitch = UnityEngine.Random.Range(1.5f, 3f);
+
+            footStep.Play();
         }
     }
 
