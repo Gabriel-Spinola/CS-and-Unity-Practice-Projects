@@ -153,8 +153,10 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Enemies-Frog")) {
+            Enemy enemy_ = col.gameObject.GetComponent<Enemy>();
+
             if (Physics2D.Raycast(transform.position, Vector3.down, 1.2f, whatIsEnemy)) {
-                Destroy(col.gameObject);
+                enemy_.JumpedOn();
 
                 Jump(() => {
                     rb.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime * 6f, ForceMode2D.Impulse);

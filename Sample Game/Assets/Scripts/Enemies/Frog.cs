@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Frog : MonoBehaviour
+public class Frog : Enemy
 {
     [SerializeField] private LayerMask whatIsGround;
 
@@ -12,17 +12,17 @@ public class Frog : MonoBehaviour
     [SerializeField] private float jumpLength = 0f;
     [SerializeField] private float jumpHeight = 0f;
 
-    private Rigidbody2D rb;
-    private Collider2D col;
-    private Animator animator;
-
     [SerializeField] private bool isFacingLeft = true;
 
-    private void Start()
+    private Rigidbody2D rb;
+    private Collider2D col;
+
+    protected override void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();   
-        col = GetComponent<Collider2D>();
-        animator = GetComponent<Animator>();
+        base.Awake();
+
+        rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<Collider2D>(); 
     }
 
     private void Update()
