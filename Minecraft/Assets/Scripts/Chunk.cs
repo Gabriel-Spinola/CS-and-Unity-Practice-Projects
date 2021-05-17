@@ -7,12 +7,6 @@ public class Chunk : MonoBehaviour
     private MeshRenderer meshRenderer;
     private MeshFilter meshFilter;
 
-    private void Awake() 
-    {
-        meshRenderer = GetComponent<MeshRenderer>();
-        meshFilter = GetComponent<MeshFilter>();
-    }
-
     private List<Vector3> vertices = new List<Vector3>();
     private List<int> triangles = new List<int>();
     private List<Vector2> uvs = new List<Vector2>();
@@ -20,6 +14,12 @@ public class Chunk : MonoBehaviour
     private bool[,,] voxelMap = new bool[VoxelData.chunkWidth, VoxelData.chunkHeight, VoxelData.chunkWidth];
 
     private int vertexIndex = 0;
+
+    private void Awake()
+    {
+        meshRenderer = GetComponent<MeshRenderer>();
+        meshFilter = GetComponent<MeshFilter>();
+    }
 
     private void Start()
     {
