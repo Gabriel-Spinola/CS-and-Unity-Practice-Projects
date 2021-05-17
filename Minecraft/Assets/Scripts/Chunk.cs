@@ -28,6 +28,9 @@ public class Chunk : MonoBehaviour
         CreateMesh();
     }
 
+    /// <summary>
+    /// Populate the voxelMap
+    /// </summary>
     private void PopulateVoxelMap() 
     {
         for (int y = 0; y < VoxelData.chunkHeight; y++)
@@ -37,6 +40,10 @@ public class Chunk : MonoBehaviour
                 }
     }
 
+    /// <summary>
+    /// Set the chunk mesh data (:
+    /// Offset the position of each voxel
+    /// </summary>
     private void CreateMeshChunkData() 
     {
         for (int y = 0; y < VoxelData.chunkHeight; y++)
