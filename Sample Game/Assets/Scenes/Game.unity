@@ -39060,6 +39060,11 @@ PrefabInstance:
       propertyPath: footStep
       value: 
       objectReference: {fileID: 38023002}
+    - target: {fileID: 2132074118122963206, guid: 8ce86b524c37b8d45a996db3f7a45e80,
+        type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2132074118122963207, guid: 8ce86b524c37b8d45a996db3f7a45e80,
         type: 3}
       propertyPath: m_Material
