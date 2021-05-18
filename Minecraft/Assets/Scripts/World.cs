@@ -6,15 +6,36 @@ public class World : MonoBehaviour
 {
     public Material material;
     public BlockType[] blockTypes;
+
+    Chunk[,] chunks = new Chunk[VoxelData.worldSizeInChunks, VoxelData.worldSizeInChunks];
+
+    private void Start()
+    {
+        GenerateWorld();
+    }
+
+    private void GenerateWorld()
+    {
+        for (int x = 0; x < VoxelData.worldSizeInChunks; x++) {
+            for (int z = 0; z < VoxelData.worldSizeInChunks; z++) {
+                CreateNewChunk(x, z);
+            }
+        }
+    }
+
+    private void CreateNewChunk(int x, int z)
+    {
+        chunks[x, z] = new Chunk(new ChunkCoord(x, z), this);
+    }
 }
 
 [System.Serializable]
 public class BlockType
 {
+    [Header("Info")]
     public string name;
     public bool isSolid;
 
-    [Space]
     [Header("Texture Values")]
     public int    backFaceTexture;
     public int   frontFaceTexture;
