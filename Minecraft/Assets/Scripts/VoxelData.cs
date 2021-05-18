@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Store the data that we will need to use when rendering the voxels
+// Face Order: Back, Front, Top, Bottom, Left, Right
 public static class VoxelData
 {
     public static readonly int chunkWidth  = 16;
     public static readonly int chunkHeight = 16;
+
+    public static readonly int textureAtlasSizeInBlocks = 4;
+
+    public static float normalizedBlockTextureSize {
+        get { return 1f / (float) textureAtlasSizeInBlocks; }
+    }
 
     // Store the voxels vertices locations
     public static readonly Vector3[] voxelVerts = new Vector3[8] {
