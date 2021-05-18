@@ -39,7 +39,12 @@ public class Chunk : MonoBehaviour
         for (int y = 0; y < VoxelData.chunkHeight; y++)
             for (int x = 0; x < VoxelData.chunkWidth; x++)
                 for (int z = 0; z < VoxelData.chunkWidth; z++) {
-                    voxelMap[x, y, z] = 2;
+                    if (y < 2)
+                        voxelMap[x, y, z] = 0;
+                    else if (y == VoxelData.chunkHeight - 1)
+                        voxelMap[x, y, z] = 2;
+                    else
+                        voxelMap[x, y, z] = 1;
                 }
     }
 
