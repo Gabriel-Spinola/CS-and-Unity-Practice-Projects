@@ -22,7 +22,7 @@ public static class VoxelData
         get { return 1f / (float) textureAtlasSizeInBlocks; }
     }
 
-    // Store the voxels vertices locations
+    [Tooltip("Store voxel vertex locations")]
     public static readonly Vector3[] voxelVerts = new Vector3[8] {
         new Vector3(0.0f, 0.0f, 0.0f),
         new Vector3(1.0f, 0.0f, 0.0f),
@@ -34,7 +34,7 @@ public static class VoxelData
         new Vector3(0.0f, 1.0f, 1.0f),
     };
 
-    // Get the coordinates to check the faces of the voxel
+    [Tooltip("Store the position of the voxel faces")]
     public static readonly Vector3[] faceChecks = new Vector3[6] {
         new Vector3( 0.0f,  0.0f, -1.0f), // Check Back   Face
         new Vector3( 0.0f,  0.0f,  1.0f), // Check Front  Face
@@ -44,7 +44,7 @@ public static class VoxelData
         new Vector3( 1.0f,  0.0f,  0.0f), // Check Right  Face
     };
 
-    // Store the voxels triangles ("faces") 
+    [Tooltip("Store the voxels triangles (\"who create the faces\")")] 
     public static readonly int[,] voxelTris = new int[6, 4] {
         // 0 1 2 2 1 3
         { 0, 3, 1, 2 }, // Back   Face
@@ -55,7 +55,7 @@ public static class VoxelData
         { 1, 2, 5, 6 }, // Right  Face
     };
 
-    // Store the voxels uvs positions
+    [Tooltip("Store the voxel uvs positions")]
     public static readonly Vector2[] voxelUvs = new Vector2[4] {
         new Vector2(0.0f, 0.0f),
         new Vector2(0.0f, 1.0f),

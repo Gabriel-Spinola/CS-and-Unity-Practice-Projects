@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class World : MonoBehaviour
 {
+    [Header("References")]
     public Transform playerTransform;
     public Material material;
     public BlockType[] blockTypes;
@@ -12,6 +13,7 @@ public class World : MonoBehaviour
 
     private Chunk[,] chunks = new Chunk[VoxelData.worldSizeInChunks, VoxelData.worldSizeInChunks];
     private List<ChunkCoord> activeChunks = new List<ChunkCoord>();
+    private ChunkCoord playerChunkCoord;
     private ChunkCoord playerLastChunkCoord;
 
     private void Start()
@@ -29,9 +31,21 @@ public class World : MonoBehaviour
 
     private void Update()
     {
-        CheckViewDistance();
+        playerChunkCoord = GetChunkCoordFromVector3(playerTransform.position);
+
+        if (!playerChunkCoord.Equals(playerLastChunkCoord))
+            CheckViewDistance();
     }
 
+    /// <summary>
+    ///  Get the voxel located in a specific position
+    ///  
+    ///  Obs:
+    ///  * The voxels are defined in the editor
+    ///  * Voxels can be stone, bedrock, air, etc...
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns>The voxel identifier</returns>
     public byte GetVoxel(Vector3 pos)
     {
         if (!IsVoxelInWorld(pos))                     return 0;
@@ -40,6 +54,11 @@ public class World : MonoBehaviour
         else                                          return 2;
     }
 
+    /// <summary>
+    /// Convert a vector3 position to a chunk coordinate
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns>Chunk coordinate</returns>
     private ChunkCoord GetChunkCoordFromVector3(Vector3 pos)
     {
         int x = Mathf.FloorToInt(pos.x / VoxelData.chunkWidth);
@@ -48,13 +67,25 @@ public class World : MonoBehaviour
         return new ChunkCoord(x, z);
     }
 
+    /// <summary>
+    /// This makes us only create chunks when they are within the view distance
+    /// and also disable the chunks that are outside the view distance.
+    /// 
+    /// - Get the player's position
+    /// 
+    /// * When looping the chunks that are in the viewing distance:
+    ///  * check if that piece must be in the world, if true:
+    ///   - if this chunk is null, create one, otherwise and if the chunk is not active, activate it
+    /// 
+    /// but in a rudimentar algorithm
+    /// </summary>
     private void CheckViewDistance()
     {
-        ChunkCoord coord = GetChunkCoordFromVector3(playerTransform.position);
+        ChunkCoord playerCoord = GetChunkCoordFromVector3(playerTransform.position);
         List<ChunkCoord> previouslyActiveChunks = new List<ChunkCoord>(activeChunks);
 
-        for (int x = coord.x - VoxelData.viewDistanceInChunks; x < coord.x + VoxelData.viewDistanceInChunks; x++) {
-            for (int z = coord.z - VoxelData.viewDistanceInChunks; z < coord.z + VoxelData.viewDistanceInChunks; z++) {
+        for (int x = playerCoord.x - VoxelData.viewDistanceInChunks; x < playerCoord.x + VoxelData.viewDistanceInChunks; x++) {
+            for (int z = playerCoord.z - VoxelData.viewDistanceInChunks; z < playerCoord.z + VoxelData.viewDistanceInChunks; z++) {
                 if (IsChunkInWorld(new ChunkCoord(x, z))) {
                     if (chunks[x, z] == null) {
                         CreateNewChunk(x, z);
@@ -73,12 +104,17 @@ public class World : MonoBehaviour
                 }
             } 
         }
-
+        
+        // Deactivate the out of range chunks
         foreach (ChunkCoord c in previouslyActiveChunks) {
             chunks[c.x, c.z].IsActive = false;
         }
     }
 
+    /// <summary>
+    /// - Generate the world (only in the view distance)
+    /// - And set the player's position
+    /// </summary>
     private void GenerateWorld()
     {
         int i = (VoxelData.worldSizeInChunks / 2) - VoxelData.viewDistanceInChunks;
@@ -93,6 +129,11 @@ public class World : MonoBehaviour
         playerTransform.position = spawnPosition;
     }
 
+    /// <summary>
+    /// Create a new Chunk
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="z"></param>
     private void CreateNewChunk(int x, int z)
     {
         chunks[x, z] = new Chunk(new ChunkCoord(x, z), this);
@@ -100,12 +141,22 @@ public class World : MonoBehaviour
         activeChunks.Add(new ChunkCoord(x, z));
     }
 
+    /// <summary>
+    /// Check if a certain chunk should be in this world
+    /// </summary>
+    /// <param name="coord"></param>
+    /// <returns>true if the chunk should be in this world and false if it shouldn't</returns>
     private bool IsChunkInWorld(ChunkCoord coord) => 
         coord.x > 0                               &&
         coord.x < VoxelData.worldSizeInChunks - 1 &&
         coord.z > 0                               &&
         coord.z < VoxelData.worldSizeInChunks - 1;
 
+    /// <summary>
+    /// Check if a certain voxel should be in this world
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns>true if the voxel should be in this world and false if it shouldn't</returns>
     private bool IsVoxelInWorld(Vector3 pos) => 
         pos.x >= 0                              &&
         pos.x < VoxelData.WorldSizeInVoxels     &&
@@ -122,6 +173,7 @@ public class BlockType
     public string name;
     public bool isSolid;
 
+    [Tooltip("Order: 0 Back, 1 Front, 2 Top, 3 Bottom, 4 Left, 5 Right")]
     [Header("Texture Values")]
     public int    backFaceTexture;
     public int   frontFaceTexture;
@@ -129,8 +181,12 @@ public class BlockType
     public int bottomFaceTexture;
     public int    leftFaceTexture;
     public int   rightFaceTexture;
-
-    // Order: Back, Front, Bottom, Top, Left, Right
+    
+    /// <summary>
+    /// Set the texture ID 
+    /// </summary>
+    /// <param name="faceIndex">receive what face the function should return</param>
+    /// <returns>Texture ID</returns>
     public int GetTextureID(int faceIndex)
     {
         switch (faceIndex) {

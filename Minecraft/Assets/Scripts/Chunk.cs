@@ -15,7 +15,7 @@ public class Chunk
     private List<int> triangles = new List<int>();
     private List<Vector2> uvs = new List<Vector2>();
 
-    // store what voxel its occuping certain space
+    [Tooltip("Store what voxel its occuping certain space")]
     private byte[,,] voxelMap = new byte[VoxelData.chunkWidth, VoxelData.chunkHeight, VoxelData.chunkWidth];
 
     private int vertexIndex = 0;
@@ -23,7 +23,7 @@ public class Chunk
     public Vector3 Position {
         get { return chunkObject.transform.position; }
     }
-
+    
     public bool IsActive {
         get { return chunkObject.activeSelf; }
         set { chunkObject.SetActive(value); }
@@ -35,6 +35,7 @@ public class Chunk
         world = _world;
 
         chunkObject = new GameObject();
+
         meshFilter = chunkObject.AddComponent<MeshFilter>();
         meshRenderer = chunkObject.AddComponent<MeshRenderer>();
 
@@ -50,7 +51,7 @@ public class Chunk
     }
 
     /// <summary>
-    /// Populate the voxelMap
+    /// Populate the voxelMap with the generated voxels
     /// </summary>
     private void PopulateVoxelMap() 
     {
@@ -62,7 +63,7 @@ public class Chunk
     }
 
     /// <summary>
-    /// Set the chunk mesh data (:
+    /// Set the chunk mesh data
     /// Offset the position of each voxel
     /// </summary>
     private void CreateMeshChunkData() 
@@ -75,8 +76,11 @@ public class Chunk
     }
 
     /// <summary>
-    /// Check if we have a voxel in a certain position
+    /// Check if there's a voxel in a certain position
+    /// Only returns true if that block its solid
     /// </summary>
+    /// <param name="pos">that "certain position"</param>
+    /// <returns>true if there's actually a voxel in that position</returns>
     private bool HasVoxelThere(Vector3 pos) 
     {
         int x = Mathf.FloorToInt(pos.x),
@@ -101,6 +105,7 @@ public class Chunk
     /// Add the vertices, uvs and triangles to its list
     /// Set the position of the voxels
     /// </summary>
+    /// <param name="pos"></param>
     private void AddVoxelDataToChunk(Vector3 pos) 
     {
         for (int i = 0; i < VoxelData.voxelTris.GetLength(0); i++) {
@@ -168,6 +173,12 @@ public class ChunkCoord
         z = _z;
     }
 
+    /// <summary>
+    /// Check if a particular chunk is the same as another previous chunk
+    /// The metric used to identify each chunk, its the Chunk Coordinate
+    /// </summary>
+    /// <param name="other">the recent chunk</param>
+    /// <returns>true if that chunk already exists, if not false</returns>
     public bool Equals(ChunkCoord other)
     {
         if (other == null) return false;
