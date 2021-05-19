@@ -57,8 +57,8 @@ public class Chunk
     {
         for (int y = 0; y < VoxelData.chunkHeight; y++)
           for (int x = 0; x < VoxelData.chunkWidth; x++)
-              for (int z = 0; z < VoxelData.chunkWidth; z++)
-                  voxelMap[x, y, z] = world.GetVoxel(new Vector3(x, y, z) + Position);
+            for (int z = 0; z < VoxelData.chunkWidth; z++)
+              voxelMap[x, y, z] = world.GetVoxel(new Vector3(x, y, z) + Position);
     }
 
     /// <summary>
