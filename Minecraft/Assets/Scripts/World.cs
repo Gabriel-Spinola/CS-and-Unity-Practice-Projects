@@ -7,6 +7,8 @@ public class World : MonoBehaviour
     [Header("References")]
     public Transform playerTransform;
     public Material material;
+
+    [Tooltip("Order: \n 0 Back, 1 Front, 2 Top, \n 3 Bottom, 4 Left, 5 Right")]
     public BlockType[] blockTypes;
 
     public Vector3 spawnPosition;
@@ -166,14 +168,13 @@ public class World : MonoBehaviour
         pos.z < VoxelData.WorldSizeInVoxels;
 }
 
-[System.Serializable]
+[System.Serializable] 
 public class BlockType
 {
     [Header("Info")]
     public string name;
     public bool isSolid;
 
-    [Tooltip("Order: 0 Back, 1 Front, 2 Top, 3 Bottom, 4 Left, 5 Right")]
     [Header("Texture Values")]
     public int    backFaceTexture;
     public int   frontFaceTexture;
