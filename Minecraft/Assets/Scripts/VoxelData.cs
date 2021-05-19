@@ -6,13 +6,19 @@ using UnityEngine;
 // Face Order: Back, Front, Top, Bottom, Left, Right
 public static class VoxelData
 {
-    public static readonly int chunkWidth  = 16;
-    public static readonly int chunkHeight = 16;
-    public static readonly int worldSizeInChunks = 5;
+    public static readonly int chunkWidth  = 8;
+    public static readonly int chunkHeight = 8;
+    public static readonly int worldSizeInChunks = 100;
 
     public static readonly int textureAtlasSizeInBlocks = 4;
 
-    public static float normalizedBlockTextureSize {
+    public static readonly int viewDistanceInChunks = 5;
+    
+    public static int WorldSizeInVoxels {
+        get { return worldSizeInChunks * chunkWidth; }
+    }
+
+    public static float NormalizedBlockTextureSize {
         get { return 1f / (float) textureAtlasSizeInBlocks; }
     }
 

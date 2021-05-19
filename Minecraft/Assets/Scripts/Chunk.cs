@@ -20,6 +20,15 @@ public class Chunk
 
     private int vertexIndex = 0;
 
+    public Vector3 Position {
+        get { return chunkObject.transform.position; }
+    }
+
+    public bool IsActive {
+        get { return chunkObject.activeSelf; }
+        set { chunkObject.SetActive(value); }
+    }
+
     public Chunk(ChunkCoord _coord, World _world)
     {
         coord = _coord;
@@ -31,7 +40,7 @@ public class Chunk
 
         chunkObject.transform.SetParent(world.transform);
         chunkObject.transform.position = new Vector3(coord.x * VoxelData.chunkWidth, 0f, coord.z * VoxelData.chunkWidth);
-        chunkObject.name = $"Chuck { coord.x }, { coord.z }";
+        chunkObject.name = $"Chunk { coord.x }, { coord.z }";
 
         meshRenderer.material = world.material;
 
@@ -48,12 +57,7 @@ public class Chunk
         for (int y = 0; y < VoxelData.chunkHeight; y++)
             for (int x = 0; x < VoxelData.chunkWidth; x++)
                 for (int z = 0; z < VoxelData.chunkWidth; z++) {
-                    if (y < 2)
-                        voxelMap[x, y, z] = 1;
-                    else if (y == VoxelData.chunkHeight - 1)
-                        voxelMap[x, y, z] = 3;
-                    else
-                        voxelMap[x, y, z] = 2;
+                    voxelMap[x, y, z] = world.GetVoxel(new Vector3(x, y, z) + Position);
                 }
     }
 
@@ -73,7 +77,7 @@ public class Chunk
     /// <summary>
     /// Check if we have a voxel in a certain position
     /// </summary>
-    private bool hasVoxelThere(Vector3 pos) 
+    private bool HasVoxelThere(Vector3 pos) 
     {
         int x = Mathf.FloorToInt(pos.x),
             y = Mathf.FloorToInt(pos.y),
@@ -85,7 +89,7 @@ public class Chunk
             (y < 0 || y > VoxelData.chunkHeight - 1) ||
             (z < 0 || z > VoxelData.chunkWidth  - 1)
         ) {
-            return false;
+            return world.blockTypes[world.GetVoxel(pos + Position)].isSolid;
         }
 
         return world.blockTypes[voxelMap[x, y, z]].isSolid;
@@ -100,7 +104,7 @@ public class Chunk
     private void AddVoxelDataToChunk(Vector3 pos) 
     {
         for (int i = 0; i < VoxelData.voxelTris.GetLength(0); i++) {
-            if (!hasVoxelThere(pos + VoxelData.faceChecks[i])) {
+            if (!HasVoxelThere(pos + VoxelData.faceChecks[i])) {
                 byte blockID = voxelMap[(int) pos.x, (int) pos.y, (int) pos.z];
 
                 for (int j = 0; j < VoxelData.voxelTris.GetLength(1); j++)
@@ -142,14 +146,14 @@ public class Chunk
         float y = textureID / VoxelData.textureAtlasSizeInBlocks;
         float x = textureID - (y * VoxelData.textureAtlasSizeInBlocks);
 
-        x *= VoxelData.normalizedBlockTextureSize;
-        y *= VoxelData.normalizedBlockTextureSize;
-        y = 1f - y - VoxelData.normalizedBlockTextureSize;
+        x *= VoxelData.NormalizedBlockTextureSize;
+        y *= VoxelData.NormalizedBlockTextureSize;
+        y = 1f - y - VoxelData.NormalizedBlockTextureSize;
 
         uvs.Add(new Vector2(x, y));
-        uvs.Add(new Vector2(x, y + VoxelData.normalizedBlockTextureSize));
-        uvs.Add(new Vector2(x + VoxelData.normalizedBlockTextureSize, y));
-        uvs.Add(new Vector2(x + VoxelData.normalizedBlockTextureSize, y + VoxelData.normalizedBlockTextureSize));
+        uvs.Add(new Vector2(x, y + VoxelData.NormalizedBlockTextureSize));
+        uvs.Add(new Vector2(x + VoxelData.NormalizedBlockTextureSize, y));
+        uvs.Add(new Vector2(x + VoxelData.NormalizedBlockTextureSize, y + VoxelData.NormalizedBlockTextureSize));
     }
 }
 
@@ -162,5 +166,12 @@ public class ChunkCoord
     {
         x = _x;
         z = _z;
+    }
+
+    public bool Equals(ChunkCoord other)
+    {
+        if (other == null) return false;
+        else if (other.x == x && other.z == z) return true;
+        else return false;
     }
 }
