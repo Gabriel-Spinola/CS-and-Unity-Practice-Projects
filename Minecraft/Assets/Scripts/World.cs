@@ -11,7 +11,7 @@ public class World : MonoBehaviour
     [Tooltip("Order: \n 0 Back, 1 Front, 2 Top, \n 3 Bottom, 4 Left, 5 Right")]
     public BlockType[] blockTypes;
 
-    public Vector3 spawnPosition;
+    [HideInInspector] public Vector3 spawnPosition;
 
     private Chunk[,] chunks = new Chunk[VoxelData.worldSizeInChunks, VoxelData.worldSizeInChunks];
     private List<ChunkCoord> activeChunks = new List<ChunkCoord>();
