@@ -78,8 +78,6 @@ public class World : MonoBehaviour
     /// * When looping the chunks that are in the viewing distance:
     ///  * check if that piece must be in the world, if true:
     ///   - if this chunk is null, create one, otherwise and if the chunk is not active, activate it
-    /// 
-    /// but in a rudimentar algorithm
     /// </summary>
     private void CheckViewDistance()
     {
