@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class World : MonoBehaviour
 {
+    public int seed;
+
     [Header("References")]
     public Transform playerTransform;
     public Material material;
@@ -20,6 +22,8 @@ public class World : MonoBehaviour
 
     private void Start()
     {
+        Random.InitState(seed);
+
         spawnPosition = new Vector3(
             x: (VoxelData.worldSizeInChunks * VoxelData.chunkWidth) / 2f,
             y:  VoxelData.chunkHeight + 5f,
@@ -50,10 +54,20 @@ public class World : MonoBehaviour
     /// <returns>The voxel identifier</returns>
     public byte GetVoxel(Vector3 pos)
     {
-        if (!IsVoxelInWorld(pos))                     return 0;
-        if (pos.y < 2)                                return 1;
-        else if (pos.y == VoxelData.chunkHeight - 1)  return 3;
-        else                                          return 2;
+        if (!IsVoxelInWorld(pos))                     
+            return 0;
+        if (pos.y < 2)
+            return 1;
+        else if (pos.y == VoxelData.chunkHeight - 1) {
+            float tempNoise = Noise.Get2DPerlin(new Vector2(pos.x, pos.z), 0f, 0.1f);
+
+            if (tempNoise < 0.5f)
+                return 3;
+            else
+                return 4;
+        }
+        else
+            return 2;
     }
 
     /// <summary>
@@ -102,7 +116,7 @@ public class World : MonoBehaviour
                         previouslyActiveChunks.RemoveAt(i);
                     }
                 }
-            } 
+            }
         }
         
         // Deactivate the out of range chunks

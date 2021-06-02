@@ -325,6 +325,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb6870e2f84b214bbb44735807a2efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  seed: 2147483647
+  playerTransform: {fileID: 963194228}
   material: {fileID: 2100000, guid: 3a7a18f52a89bbc44bd01e028bc81ba2, type: 2}
   blockTypes:
   - name: Air
@@ -359,6 +361,15 @@ MonoBehaviour:
     bottomFaceTexture: 1
     leftFaceTexture: 2
     rightFaceTexture: 2
+  - name: Sand
+    isSolid: 1
+    backFaceTexture: 10
+    frontFaceTexture: 10
+    topFaceTexture: 10
+    bottomFaceTexture: 10
+    leftFaceTexture: 10
+    rightFaceTexture: 10
+  spawnPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &1914186982
 Transform:
   m_ObjectHideFlags: 0
