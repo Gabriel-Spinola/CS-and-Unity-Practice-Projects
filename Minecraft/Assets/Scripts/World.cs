@@ -54,20 +54,22 @@ public class World : MonoBehaviour
     /// <returns>The voxel identifier</returns>
     public byte GetVoxel(Vector3 pos)
     {
+        int yPos = Mathf.FloorToInt(pos.y);
+
+        /* ***IMMUTABLE PASS*** */
+
+        // If outside world, return air.
         if (!IsVoxelInWorld(pos))                     
             return 0;
-        if (pos.y < 2)
-            return 1;
-        else if (pos.y == VoxelData.chunkHeight - 1) {
-            float tempNoise = Noise.Get2DPerlin(new Vector2(pos.x, pos.z), 0f, 0.1f);
 
-            if (tempNoise < 0.5f)
-                return 3;
-            else
-                return 4;
+        // If bottom block of chunk, return bedrock.
+        if (yPos == 0) {
+            return 1;
         }
-        else
-            return 2;
+
+        /* ***BASIC TERRAIN PASS*** */
+
+        int terrainHeight = Mathf.FloorToInt(Noise.Get2DPerlin(new Vector2(pos.x, pos.z)));
     }
 
     /// <summary>
