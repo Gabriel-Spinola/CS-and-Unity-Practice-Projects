@@ -754,8 +754,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac8705f8b35ebcf4aab77b69d2b3cfda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainTheme: {fileID: 8300000, guid: 0f33fc3ca80d9ee419f05e010c87af8d, type: 3}
-  menuTheme: {fileID: 8300000, guid: a4767e9043a6c434fbd65d030722f5ef, type: 3}
+  sceneThemes:
+  - name: Menu
+    theme: {fileID: 8300000, guid: d9d8eb21323e3b04aafc584cc98c07a1, type: 3}
+    fadeDuration: 2
+  - name: Play
+    theme: {fileID: 8300000, guid: 0f33fc3ca80d9ee419f05e010c87af8d, type: 3}
+    fadeDuration: 2
 --- !u!114 &976656936
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,21 +1,52 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MusicManager : MonoBehaviour
 {
-    [SerializeField] private AudioClip mainTheme = null;
-    [SerializeField] private AudioClip menuTheme = null;
+    [SerializeField] private SceneTheme[] sceneThemes;
+
+	private string sceneName;
 
     private void Start()
     {
-        AudioManager._I.PlayMusic(menuTheme, 2f);
+		OnLevelWasLoaded(0);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            AudioManager._I.PlayMusic(mainTheme, 3f);
+	void OnLevelWasLoaded(int sceneIndex)
+	{
+		string newSceneName = SceneManager.GetActiveScene().name;
+
+		if (newSceneName != sceneName) {
+			sceneName = newSceneName;
+
+			Invoke(nameof(PlayMusic), .2f);
+		}
+	}
+
+	void PlayMusic()
+	{
+		AudioClip clipToPlay = null;
+		float fadeDuration = 0f;
+
+        for (int i = 0; i < sceneThemes.Length; i++) {
+			if (sceneName == sceneThemes[i].name) {
+				clipToPlay = sceneThemes[i].theme;
+				fadeDuration = sceneThemes[i].fadeDuration;
+            }
         }
+
+		if (clipToPlay != null) {
+			AudioManager._I.PlayMusic(clipToPlay, fadeDuration);
+
+			Invoke(nameof(PlayMusic), clipToPlay.length);
+		}
+	}
+
+	[System.Serializable]
+	public class SceneTheme
+    {
+		public string name;
+		public AudioClip theme;
+		public float fadeDuration;
     }
 }
