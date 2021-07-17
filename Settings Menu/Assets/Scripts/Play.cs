@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Play : MonoBehaviour
 {
@@ -12,6 +11,11 @@ public class Play : MonoBehaviour
     public void PlayJumpSound()
     {
         AudioManager._I.PlaySound2D("Jump Sound");
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }
     

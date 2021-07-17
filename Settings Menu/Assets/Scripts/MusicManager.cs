@@ -7,17 +7,18 @@ public class MusicManager : MonoBehaviour
 
 	private string sceneName;
 
-    private void Start() => OnLevelWasLoaded(0);
-
-	void OnLevelWasLoaded(int sceneIndex)
+	private void Awake()
 	{
-		string newSceneName = SceneManager.GetActiveScene().name;
+		SceneManager.sceneLoaded += ( (Scene scene, LoadSceneMode mode) => {
+			string newSceneName = scene.name;
+			Debug.Log(scene.name);
 
-		if (newSceneName != sceneName) {
-			sceneName = newSceneName;
+			if (newSceneName != sceneName) {
+				sceneName = newSceneName;
 
-			Invoke(nameof(PlayMusic), .2f);
-		}
+				Invoke(nameof(PlayMusic), .2f);
+			}
+		} );
 	}
 
 	void PlayMusic()

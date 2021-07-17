@@ -11,6 +11,23 @@ public class Menu : MonoBehaviour
 
     private int activeScreenResIndex;
 
+    private void Start()
+    {
+        activeScreenResIndex = PlayerPrefs.GetInt("screen res index", activeScreenResIndex);
+
+        bool isFullscren = PlayerPrefs.GetInt("fullscreen") == 1 ? true : false;
+
+        volumeSliders[0].value = AudioManager._I.MasterVolumePercent;
+        volumeSliders[1].value = AudioManager._I.SfxVolumePercent; 
+        volumeSliders[2].value = AudioManager._I.MusicVolumePercent;
+
+        for (int i = 0; i < resolutionToggles.Length; i++) {
+            resolutionToggles[i].isOn = i == activeScreenResIndex;
+        }
+
+        SetFullscreen(isFullscren);
+    }
+
     public void Play() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     public void Quit() => Application.Quit();
 
@@ -22,6 +39,9 @@ public class Menu : MonoBehaviour
             activeScreenResIndex = index;
 
             Screen.SetResolution(screenWidths[index], (int) (screenWidths[index] / aspectRatio), false);
+
+            PlayerPrefs.SetInt("screen res index", activeScreenResIndex);
+            PlayerPrefs.Save();
         }
     }
 
@@ -40,20 +60,14 @@ public class Menu : MonoBehaviour
         else {
             SetScreenResolution(activeScreenResIndex);
         }
+
+        PlayerPrefs.SetInt("fullscreen", isFullscreen ? 1 : 0);
+        PlayerPrefs.Save();
     }
 
-    public void SetMasterVolume(float volume)
-    {
+    public void SetMasterVolume(float volume) => AudioManager._I.SetVolume(volume, AudioManager.AudioChannel.Master);
 
-    }
+    public void SetSFXVolume(float volume) => AudioManager._I.SetVolume(volume, AudioManager.AudioChannel.SFX);
 
-    public void SetMusicVolume(float volume)
-    {
-
-    }
-    
-    public void SetSFXVolume(float volume)
-    {
-
-    }
+    public void SetMusicVolume(float volume) => AudioManager._I.SetVolume(volume, AudioManager.AudioChannel.Music);
 }

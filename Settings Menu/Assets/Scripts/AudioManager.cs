@@ -12,15 +12,17 @@ public class AudioManager : MonoBehaviour
         Music
     }
 
+    [HideInInspector] public float MasterVolumePercent { get; private set; }
+    [HideInInspector] public float MusicVolumePercent { get; private set; }
+    [HideInInspector] public float SfxVolumePercent { get; private set; }
+
+    private Dictionary<string, bool> isFadedDictionary = new Dictionary<string, bool>();
+
     private AudioSource[] musicSources = null;
     private AudioSource SFX2DSource = null;
     private SoundLibrary library;
 
-    private float masterVolumePercent = 1f;
-    private float musicVolumePercent = .2f;
-    private float sfxVolumePercent = 1f;
-
-    private int activeMusicSource = 0;
+    private int activeMusicSource;
 
     private void Awake()
     {
@@ -42,14 +44,18 @@ public class AudioManager : MonoBehaviour
                 newMusicSource.transform.parent = transform;
             }
 
+            foreach (AudioSource music in musicSources) {
+                isFadedDictionary.Add(music.name, false);
+            }
+
             GameObject newSFX2DSource = new GameObject("2D Sound Effect Source");
 
             SFX2DSource = newSFX2DSource.AddComponent<AudioSource>();
             newSFX2DSource.transform.parent = transform;
 
-            masterVolumePercent = PlayerPrefs.GetFloat("master vol", masterVolumePercent);
-            sfxVolumePercent = PlayerPrefs.GetFloat("sfx vol", sfxVolumePercent);
-            musicVolumePercent = PlayerPrefs.GetFloat("music vol", musicVolumePercent);
+            MasterVolumePercent = PlayerPrefs.GetFloat("master vol", 1f);
+            SfxVolumePercent = PlayerPrefs.GetFloat("sfx vol", 1f);
+            MusicVolumePercent = PlayerPrefs.GetFloat("music vol", 1f);
         }
     }
 
@@ -57,25 +63,29 @@ public class AudioManager : MonoBehaviour
     {
         switch (channel) {
             case AudioChannel.Master:
-                masterVolumePercent = volumePercent;
+                MasterVolumePercent = volumePercent;
             break;
 
             case AudioChannel.SFX:
-                sfxVolumePercent = volumePercent;
+                SfxVolumePercent = volumePercent;
             break;
 
             case AudioChannel.Music:
-                musicVolumePercent = volumePercent;
+                MusicVolumePercent = volumePercent;
             break;
         }
 
         for (int i = 0; i < musicSources.Length; i++) {
-            musicSources[i].volume = musicVolumePercent * masterVolumePercent;
+            if (!isFadedDictionary[musicSources[i].name]) {
+                musicSources[i].volume = MusicVolumePercent * MasterVolumePercent;
+
+                
+            }
         }
         
-        PlayerPrefs.SetFloat("master vol", masterVolumePercent);
-        PlayerPrefs.SetFloat("sfx vol", sfxVolumePercent);
-        PlayerPrefs.SetFloat("music vol", musicVolumePercent);
+        PlayerPrefs.SetFloat("master vol", MasterVolumePercent);
+        PlayerPrefs.SetFloat("sfx vol", SfxVolumePercent);
+        PlayerPrefs.SetFloat("music vol", MusicVolumePercent);
         PlayerPrefs.Save();
     }
 
@@ -92,7 +102,7 @@ public class AudioManager : MonoBehaviour
     public void PlaySound(AudioClip clip, Vector3 pos)
     {
         if (clip != null) {
-            AudioSource.PlayClipAtPoint(clip, pos, sfxVolumePercent * masterVolumePercent);
+            AudioSource.PlayClipAtPoint(clip, pos, SfxVolumePercent * MasterVolumePercent);
         }
         else {
             Debug.LogError($"Can't Play \"{ clip.name }\" Audio Clip");
@@ -108,7 +118,7 @@ public class AudioManager : MonoBehaviour
     {
         SFX2DSource.pitch = pitch;
         SFX2DSource.priority = priority;
-        SFX2DSource.PlayOneShot(library.GetClipFromName(soundName), sfxVolumePercent * masterVolumePercent);
+        SFX2DSource.PlayOneShot(library.GetClipFromName(soundName), SfxVolumePercent * MasterVolumePercent);
     }
 
     private IEnumerator MusicCrossfade(float duration)
@@ -118,8 +128,11 @@ public class AudioManager : MonoBehaviour
         while (percent < 1) {
             percent += Time.deltaTime * 1 / duration;
 
-            musicSources[activeMusicSource].volume = Mathf.Lerp(0f, musicVolumePercent * masterVolumePercent, percent);
-            musicSources[1 - activeMusicSource].volume = Mathf.Lerp(musicVolumePercent * masterVolumePercent, 0f, percent);
+            musicSources[activeMusicSource].volume = Mathf.Lerp(0f, MusicVolumePercent * MasterVolumePercent, percent);
+            musicSources[1 - activeMusicSource].volume = Mathf.Lerp(MusicVolumePercent * MasterVolumePercent, 0f, percent);
+
+            isFadedDictionary[musicSources[activeMusicSource].name] = false; 
+            isFadedDictionary[musicSources[1 - activeMusicSource].name] = true; 
 
             yield return null;
         }
