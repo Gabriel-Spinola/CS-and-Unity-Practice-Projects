@@ -755,7 +755,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainTheme: {fileID: 8300000, guid: 0f33fc3ca80d9ee419f05e010c87af8d, type: 3}
-  menuTheme: {fileID: 8300000, guid: d9d8eb21323e3b04aafc584cc98c07a1, type: 3}
+  menuTheme: {fileID: 8300000, guid: a4767e9043a6c434fbd65d030722f5ef, type: 3}
 --- !u!114 &976656936
 MonoBehaviour:
   m_ObjectHideFlags: 0

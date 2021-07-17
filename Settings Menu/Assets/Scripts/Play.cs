@@ -6,7 +6,7 @@ public class Play : MonoBehaviour
 {
     public void PlayShootSound()
     {
-        AudioManager._I.PlaySound2D("Shoot Sound");
+        AudioManager._I.PlaySound2D("Shoot Sound", 1.5f);
     }
     
     public void PlayJumpSound()
