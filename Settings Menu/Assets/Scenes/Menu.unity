@@ -2546,9 +2546,11 @@ MonoBehaviour:
   - name: Menu
     theme: {fileID: 8300000, guid: d9d8eb21323e3b04aafc584cc98c07a1, type: 3}
     fadeDuration: 2
+    pitch: 1
   - name: Play
     theme: {fileID: 8300000, guid: 0f33fc3ca80d9ee419f05e010c87af8d, type: 3}
     fadeDuration: 2
+    pitch: 1
 --- !u!114 &1076496008
 MonoBehaviour:
   m_ObjectHideFlags: 0

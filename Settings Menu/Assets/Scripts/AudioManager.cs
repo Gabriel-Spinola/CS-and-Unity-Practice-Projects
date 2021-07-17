@@ -79,10 +79,11 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public void PlayMusic(AudioClip clip, float fadeDuration = 1f) {
+    public void PlayMusic(AudioClip clip, float fadeDuration = 1f, float pitch = 1f) {
         activeMusicSource = 1 - activeMusicSource;
 
         musicSources[activeMusicSource].clip = clip;
+        musicSources[activeMusicSource].pitch = pitch;
         musicSources[activeMusicSource].Play();
 
         StartCoroutine(MusicCrossfade(fadeDuration));

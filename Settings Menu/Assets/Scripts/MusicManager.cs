@@ -7,10 +7,7 @@ public class MusicManager : MonoBehaviour
 
 	private string sceneName;
 
-    private void Start()
-    {
-		OnLevelWasLoaded(0);
-    }
+    private void Start() => OnLevelWasLoaded(0);
 
 	void OnLevelWasLoaded(int sceneIndex)
 	{
@@ -27,16 +24,18 @@ public class MusicManager : MonoBehaviour
 	{
 		AudioClip clipToPlay = null;
 		float fadeDuration = 0f;
+		float pitch = 0f;
 
         for (int i = 0; i < sceneThemes.Length; i++) {
 			if (sceneName == sceneThemes[i].name) {
 				clipToPlay = sceneThemes[i].theme;
 				fadeDuration = sceneThemes[i].fadeDuration;
+				pitch = sceneThemes[i].pitch;
             }
         }
 
 		if (clipToPlay != null) {
-			AudioManager._I.PlayMusic(clipToPlay, fadeDuration);
+			AudioManager._I.PlayMusic(clipToPlay, fadeDuration, pitch);
 
 			Invoke(nameof(PlayMusic), clipToPlay.length);
 		}
@@ -48,5 +47,6 @@ public class MusicManager : MonoBehaviour
 		public string name;
 		public AudioClip theme;
 		public float fadeDuration;
+		public float pitch;
     }
 }
