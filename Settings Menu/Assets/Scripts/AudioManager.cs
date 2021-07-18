@@ -77,9 +77,7 @@ public class AudioManager : MonoBehaviour
 
         for (int i = 0; i < musicSources.Length; i++) {
             if (!isFadedDictionary[musicSources[i].name]) {
-                musicSources[i].volume = MusicVolumePercent * MasterVolumePercent;
-
-                
+                musicSources[i].volume = MusicVolumePercent * MasterVolumePercent;   
             }
         }
         
