@@ -100,11 +100,11 @@ namespace Seven.AI
                 switch (enemyState) {
                     case ENEMY_STATE.PATROLLING:
                         Patrol();
-                        break;
+                    break;
 
                     case ENEMY_STATE.CHASING:
                         Chase();
-                        break;
+                    break;
                 }
             }
         }
