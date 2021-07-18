@@ -20,6 +20,9 @@ public class MusicManager : MonoBehaviour
 
 				Invoke(nameof(PlayMusic), .2f);
 			}
+			else {
+				Debug.LogWarning($"Theme: { newSceneName } not found!");
+			}
 		});
 	}
 

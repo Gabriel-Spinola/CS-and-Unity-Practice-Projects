@@ -103,7 +103,7 @@ public class AudioManager : MonoBehaviour
             AudioSource.PlayClipAtPoint(clip, pos, SFXVolumePercent * MasterVolumePercent);
         }
         else {
-            Debug.LogError($"Can't Play \"{ clip.name }\" Audio Clip");
+            Debug.LogWarning($"Can't Play \"{ clip.name }\" Audio Clip");
         }
     }
     
