@@ -24,7 +24,7 @@ public class SoundLibrary : MonoBehaviour
             return sounds[Random.Range(0, sounds.Length)];
         }
 
-        Debug.LogError($"Can't find key { name }");
+        Debug.LogError($"Sound: { name } not found!");
 
         return null;
     }
