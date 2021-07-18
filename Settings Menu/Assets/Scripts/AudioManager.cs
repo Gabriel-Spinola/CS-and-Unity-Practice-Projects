@@ -20,7 +20,7 @@ public class AudioManager : MonoBehaviour
 
     private AudioSource[] musicSources = null;
     private AudioSource SFX2DSource = null;
-    private SoundLibrary library;
+    private SoundLibrary library = null;
 
     private int activeMusicSource;
 
