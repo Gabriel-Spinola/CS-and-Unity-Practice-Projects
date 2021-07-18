@@ -14,7 +14,7 @@ public class AudioManager : MonoBehaviour
 
     [HideInInspector] public float MasterVolumePercent { get; private set; }
     [HideInInspector] public float MusicVolumePercent { get; private set; }
-    [HideInInspector] public float SfxVolumePercent { get; private set; }
+    [HideInInspector] public float SFXVolumePercent { get; private set; }
 
     private Dictionary<string, bool> isFadedDictionary = new Dictionary<string, bool>();
 
@@ -54,7 +54,7 @@ public class AudioManager : MonoBehaviour
             newSFX2DSource.transform.parent = transform;
 
             MasterVolumePercent = PlayerPrefs.GetFloat("master vol", 1f);
-            SfxVolumePercent = PlayerPrefs.GetFloat("sfx vol", 1f);
+            SFXVolumePercent = PlayerPrefs.GetFloat("sfx vol", 1f);
             MusicVolumePercent = PlayerPrefs.GetFloat("music vol", 1f);
         }
     }
@@ -67,7 +67,7 @@ public class AudioManager : MonoBehaviour
             break;
 
             case AudioChannel.SFX:
-                SfxVolumePercent = volumePercent;
+                SFXVolumePercent = volumePercent;
             break;
 
             case AudioChannel.Music:
@@ -82,7 +82,7 @@ public class AudioManager : MonoBehaviour
         }
         
         PlayerPrefs.SetFloat("master vol", MasterVolumePercent);
-        PlayerPrefs.SetFloat("sfx vol", SfxVolumePercent);
+        PlayerPrefs.SetFloat("sfx vol", SFXVolumePercent);
         PlayerPrefs.SetFloat("music vol", MusicVolumePercent);
         PlayerPrefs.Save();
     }
@@ -100,7 +100,7 @@ public class AudioManager : MonoBehaviour
     public void PlaySound(AudioClip clip, Vector3 pos)
     {
         if (clip != null) {
-            AudioSource.PlayClipAtPoint(clip, pos, SfxVolumePercent * MasterVolumePercent);
+            AudioSource.PlayClipAtPoint(clip, pos, SFXVolumePercent * MasterVolumePercent);
         }
         else {
             Debug.LogError($"Can't Play \"{ clip.name }\" Audio Clip");
@@ -116,7 +116,7 @@ public class AudioManager : MonoBehaviour
     {
         SFX2DSource.pitch = pitch;
         SFX2DSource.priority = priority;
-        SFX2DSource.PlayOneShot(library.GetClipFromName(soundName), SfxVolumePercent * MasterVolumePercent);
+        SFX2DSource.PlayOneShot(library.GetClipFromName(soundName), SFXVolumePercent * MasterVolumePercent);
     }
 
     private IEnumerator MusicCrossfade(float duration)
