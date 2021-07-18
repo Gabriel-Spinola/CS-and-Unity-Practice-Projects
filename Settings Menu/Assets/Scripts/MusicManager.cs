@@ -9,16 +9,18 @@ public class MusicManager : MonoBehaviour
 
 	private void Awake()
 	{
-		SceneManager.sceneLoaded += ( (Scene scene, LoadSceneMode mode) => {
+		DontDestroyOnLoad(gameObject);
+
+		// Shows a Unity warning, but doesn't cause any error.
+		SceneManager.sceneLoaded += ((Scene scene, LoadSceneMode mode) => {
 			string newSceneName = scene.name;
-			Debug.Log(scene.name);
 
 			if (newSceneName != sceneName) {
 				sceneName = newSceneName;
 
 				Invoke(nameof(PlayMusic), .2f);
 			}
-		} );
+		});
 	}
 
 	void PlayMusic()
