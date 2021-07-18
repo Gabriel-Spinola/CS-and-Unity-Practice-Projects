@@ -4,219 +4,224 @@ using Pathfinding;
 using System;
 using Seven.Angles;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(Seeker))]
-public abstract class Enemy : MonoBehaviour
+namespace Seven.AI
 {
-    [Header("References")]
-    [SerializeField] protected Transform attackPoint = null;
-
-    [SerializeField] private LayerMask whatIsWall = 8;
-    [SerializeField] protected LayerMask whatIsPlayer = 0;
-
-    [Header("Config")]
-    [SerializeField] protected bool shouldPatrol = false;
-    [SerializeField] protected bool drawGizmos = true;
-
-    [Tooltip("Defines how far the melee attack point will get from the enemy")]
-    [Range(0.5f, 6f)]
-    public float attackPointRotRadius = 0.5f;
-
-    [Header("Stats")]
-    [SerializeField] protected float maxHealth = 100;
-    [SerializeField] protected float speed = 500f;
-
-    [Header("State Triggers")]
-    [Range(0f, 20f)]
-    [SerializeField] protected float chaseRadius = 10f;
-    [Range(0f, 10f)]
-    [SerializeField] protected float attackRadius = 5f;
-    [SerializeField] protected float nextWaypointDistance = 3f;
-
-    [Header("#if should patrol")]
-    [SerializeField] protected float startWaitTime = 0f;
-    [SerializeField] protected Transform[] moveSpots = null;
-
-    [Space]
-
-    protected Rigidbody2D rb = null;
-    protected Path path = null;
-    protected Seeker seeker = null;
-    protected Transform playerTransform = null;
-
-    protected enum ENEMY_STATE {
-        NEUTRAL,
-        PATROLLING,
-        CHASING,
-        ATTACKING
-    }
-
-    protected ENEMY_STATE enemyState = ENEMY_STATE.NEUTRAL;
-
-    protected Vector2 dir = Vector2.zero;
-
-    protected float lookAngle = 0f;
-
-    protected bool canMove = true;
-
-    private int randomSpot = 0;
-    private int currentWaypoint = 0;
-
-    private float waitTime = 0f;
-    private float currentHealth = 0f;
-
-    protected virtual void Awake()
+    [RequireComponent(typeof(Rigidbody2D), typeof(Seeker))]
+    public abstract class Enemy : MonoBehaviour
     {
-        playerTransform = GameObject.Find("[Player]").GetComponent<Transform>();
-        rb = GetComponent<Rigidbody2D>();
-        seeker = GetComponent<Seeker>();
-    }
+        [Header("References")]
+        [SerializeField] protected Transform attackPoint = null;
 
-    protected virtual void Start()
-    {
-        currentHealth = maxHealth;
-        waitTime = startWaitTime;
+        [SerializeField] private LayerMask whatIsWall = 8;
+        [SerializeField] protected LayerMask whatIsPlayer = 0;
 
-        randomSpot = UnityEngine.Random.Range(0, moveSpots.Length);
+        [Header("Config")]
+        [SerializeField] protected bool shouldPatrol = false;
+        [SerializeField] protected bool drawGizmos = true;
 
-        InvokeRepeating(nameof(UpdatePath), 0f, .5f);
-    }
+        [Tooltip("Defines how far the melee attack point will get from the enemy")]
+        [Range(0.5f, 6f)]
+        public float attackPointRotRadius = 0.5f;
 
-    protected virtual void Update()
-    {
-        if (currentHealth <= 0)
-            Die();
+        [Header("Stats")]
+        [SerializeField] protected float maxHealth = 100;
+        [SerializeField] protected float speed = 500f;
 
-        lookAngle = StaticRes.LookDir(transform.position, playerTransform.position);
+        [Header("State Triggers")]
+        [Range(0f, 20f)]
+        [SerializeField] protected float chaseRadius = 10f;
+        [Range(0f, 10f)]
+        [SerializeField] protected float attackRadius = 5f;
+        [SerializeField] protected float nextWaypointDistance = 3f;
 
-        CheckState();   
-    }
+        [Header("#if should patrol")]
+        [SerializeField] protected float startWaitTime = 0f;
+        [SerializeField] protected Transform[] moveSpots = null;
 
-    protected virtual void FixedUpdate()
-    {
-        if (canMove) {
-            switch (enemyState) {
-                case ENEMY_STATE.PATROLLING:
-                    Patrol();
-                break;
+        [Space]
 
-                case ENEMY_STATE.CHASING:
-                    Chase();
-                break;
+        protected Rigidbody2D rb = null;
+        protected Path path = null;
+        protected Seeker seeker = null;
+        protected Transform playerTransform = null;
+
+        protected enum ENEMY_STATE
+        {
+            NEUTRAL,
+            PATROLLING,
+            CHASING,
+            ATTACKING
+        }
+
+        protected ENEMY_STATE enemyState = ENEMY_STATE.NEUTRAL;
+
+        protected Vector2 dir = Vector2.zero;
+
+        protected float lookAngle = 0f;
+
+        protected bool canMove = true;
+
+        private int randomSpot = 0;
+        private int currentWaypoint = 0;
+
+        private float waitTime = 0f;
+        private float currentHealth = 0f;
+
+        protected virtual void Awake()
+        {
+            playerTransform = GameObject.Find("[Player]").GetComponent<Transform>();
+            rb = GetComponent<Rigidbody2D>();
+            seeker = GetComponent<Seeker>();
+        }
+
+        protected virtual void Start()
+        {
+            currentHealth = maxHealth;
+            waitTime = startWaitTime;
+
+            randomSpot = UnityEngine.Random.Range(0, moveSpots.Length);
+
+            InvokeRepeating(nameof(UpdatePath), 0f, .5f);
+        }
+
+        protected virtual void Update()
+        {
+            if (currentHealth <= 0)
+                Die();
+
+            lookAngle = StaticRes.LookDir(transform.position, playerTransform.position);
+
+            CheckState();
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            if (canMove) {
+                switch (enemyState) {
+                    case ENEMY_STATE.PATROLLING:
+                        Patrol();
+                        break;
+
+                    case ENEMY_STATE.CHASING:
+                        Chase();
+                        break;
+                }
             }
         }
-    }
 
-    protected void CheckState()
-    {
-        if (Physics2D.OverlapCircle(transform.position, chaseRadius, whatIsPlayer) && enemyState == ENEMY_STATE.NEUTRAL) {
-            enemyState = ENEMY_STATE.CHASING; 
-        }
-
-        if (
-            Physics2D.OverlapCircle(transform.position, attackRadius, whatIsPlayer) &&
-            !Physics2D.Linecast(transform.position, playerTransform.position, whatIsWall) &&
-            enemyState == ENEMY_STATE.CHASING
-        ) {
-            enemyState = ENEMY_STATE.ATTACKING;
-        }
-
-        if (enemyState == ENEMY_STATE.ATTACKING) {
-            if (!Physics2D.OverlapCircle(transform.position, attackRadius, whatIsPlayer)) {
+        protected void CheckState()
+        {
+            if (Physics2D.OverlapCircle(transform.position, chaseRadius, whatIsPlayer) && enemyState == ENEMY_STATE.NEUTRAL) {
                 enemyState = ENEMY_STATE.CHASING;
             }
-        }
 
-        if (shouldPatrol) {
-            if (enemyState == ENEMY_STATE.CHASING) {
-                if (!Physics2D.OverlapCircle(transform.position, chaseRadius, whatIsPlayer)) {
-                    enemyState = ENEMY_STATE.PATROLLING;
+            if (
+                Physics2D.OverlapCircle(transform.position, attackRadius, whatIsPlayer) &&
+                !Physics2D.Linecast(transform.position, playerTransform.position, whatIsWall) &&
+                enemyState == ENEMY_STATE.CHASING
+            ) {
+                enemyState = ENEMY_STATE.ATTACKING;
+            }
+
+            if (enemyState == ENEMY_STATE.ATTACKING) {
+                if (!Physics2D.OverlapCircle(transform.position, attackRadius, whatIsPlayer)) {
+                    enemyState = ENEMY_STATE.CHASING;
                 }
             }
 
-            if (Physics2D.OverlapCircle(transform.position, chaseRadius, whatIsPlayer) && enemyState == ENEMY_STATE.PATROLLING) {
-                enemyState = ENEMY_STATE.CHASING;
-            }
-        }
-        else if (enemyState == ENEMY_STATE.CHASING) {
-            if (!Physics2D.OverlapCircle(transform.position, chaseRadius, whatIsPlayer)) {
-                enemyState = ENEMY_STATE.NEUTRAL;
-            }
-        }
-    }
-
-    protected virtual void Patrol()
-    {
-        rb.position = Vector2.MoveTowards(transform.position, moveSpots[randomSpot].position, speed * Time.fixedDeltaTime);
-
-        if (Vector2.Distance(transform.position, moveSpots[randomSpot].position) < 0.2f) {
-            if (waitTime <= 0) {
-                randomSpot = UnityEngine.Random.Range(0, moveSpots.Length);
-                waitTime = startWaitTime;
-            }
-            else {
-                waitTime -= Time.fixedDeltaTime;
-            }
-        }
-    }
-
-    protected virtual void Chase()
-    {
-        if (path == null)
-            return;
-
-        if (currentWaypoint >= path.vectorPath.Count) {
-            Debug.Log("End Of Path Reached");
-
-            return;
-        }
-
-        Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
-
-        rb.AddForce(dir * speed * Time.deltaTime);
-
-        float distance = Vector2.Distance(transform.position, path.vectorPath[currentWaypoint]);
-
-        if (distance < nextWaypointDistance) {
-            currentWaypoint++;
-        }
-    }
-
-    protected void UpdatePath()
-    {
-        if (enemyState == ENEMY_STATE.CHASING) {
-            if (seeker.IsDone()) {
-                seeker.StartPath(transform.position, playerTransform.position, (Path p) => {
-                    if (!p.error) {
-                        path = p;
-                        currentWaypoint = 0;
+            if (shouldPatrol) {
+                if (enemyState == ENEMY_STATE.CHASING) {
+                    if (!Physics2D.OverlapCircle(transform.position, chaseRadius, whatIsPlayer)) {
+                        enemyState = ENEMY_STATE.PATROLLING;
                     }
-                    else {
-                        throw new Exception("Failure at loading path");
-                    }
-                });
+                }
+
+                if (Physics2D.OverlapCircle(transform.position, chaseRadius, whatIsPlayer) && enemyState == ENEMY_STATE.PATROLLING) {
+                    enemyState = ENEMY_STATE.CHASING;
+                }
+            }
+            else if (enemyState == ENEMY_STATE.CHASING) {
+                if (!Physics2D.OverlapCircle(transform.position, chaseRadius, whatIsPlayer)) {
+                    enemyState = ENEMY_STATE.NEUTRAL;
+                }
             }
         }
-    }
 
-    protected virtual void Attack() {
-        if (canMove is false)
-            return;
+        protected virtual void Patrol()
+        {
+            rb.position = Vector2.MoveTowards(transform.position, moveSpots[randomSpot].position, speed * Time.fixedDeltaTime);
 
-        Vector3 v3Pos = Quaternion.AngleAxis(lookAngle, Vector3.forward) * (Vector3.right * attackPointRotRadius);
+            if (Vector2.Distance(transform.position, moveSpots[randomSpot].position) < 0.2f) {
+                if (waitTime <= 0) {
+                    randomSpot = UnityEngine.Random.Range(0, moveSpots.Length);
+                    waitTime = startWaitTime;
+                }
+                else {
+                    waitTime -= Time.fixedDeltaTime;
+                }
+            }
+        }
 
-        attackPoint.position = transform.position + v3Pos;
-    }
+        protected virtual void Chase()
+        {
+            if (path == null)
+                return;
 
-    public void TakeDamage(float damage) => currentHealth -= damage;
+            if (currentWaypoint >= path.vectorPath.Count) {
+                Debug.Log("End Of Path Reached");
 
-    public virtual void Die() => Destroy(gameObject);
+                return;
+            }
 
-    public IEnumerator DisabeMovement(float time)
-    {
-        canMove = false;
+            Vector3 dir = ( path.vectorPath[currentWaypoint] - transform.position ).normalized;
 
-        yield return new WaitForSeconds(time);
+            rb.AddForce(dir * speed * Time.deltaTime);
 
-        canMove = true;
+            float distance = Vector2.Distance(transform.position, path.vectorPath[currentWaypoint]);
+
+            if (distance < nextWaypointDistance) {
+                currentWaypoint++;
+            }
+        }
+
+        protected void UpdatePath()
+        {
+            if (enemyState == ENEMY_STATE.CHASING) {
+                if (seeker.IsDone()) {
+                    seeker.StartPath(transform.position, playerTransform.position, (Path p) => {
+                        if (!p.error) {
+                            path = p;
+                            currentWaypoint = 0;
+                        }
+                        else {
+                            throw new Exception("Failure at loading path");
+                        }
+                    });
+                }
+            }
+        }
+
+        protected virtual void Attack()
+        {
+            if (canMove is false)
+                return;
+
+            Vector3 v3Pos = Quaternion.AngleAxis(lookAngle, Vector3.forward) * ( Vector3.right * attackPointRotRadius );
+
+            attackPoint.position = transform.position + v3Pos;
+        }
+
+        public void TakeDamage(float damage) => currentHealth -= damage;
+
+        public virtual void Die() => Destroy(gameObject);
+
+        public IEnumerator DisabeMovement(float time)
+        {
+            canMove = false;
+
+            yield return new WaitForSeconds(time);
+
+            canMove = true;
+        }
     }
 }
