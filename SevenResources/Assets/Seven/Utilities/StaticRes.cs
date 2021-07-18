@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Seven.Angles 
+namespace Seven.Utilities
 {
     public static class StaticRes
     {
