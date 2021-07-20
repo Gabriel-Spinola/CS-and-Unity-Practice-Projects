@@ -2,7 +2,7 @@
 using UnityEngine;
 using Pathfinding;
 using System;
-using Seven.Angles;
+using Seven.Utilities;
 
 namespace Seven.AI
 {
