@@ -25,22 +25,22 @@ public class Player : MonoBehaviour, ICharacter
     [SerializeField] private float grapMoveSpeed = 8f;
     [SerializeField] private float maxTimeGrabbed = 2f;
 
-    private float timeGrabbed;
-
     [Header("Walljump")]
     [SerializeField] private float wallJumpForce = 10f;
 
     private Rigidbody2D rb = null;
     private Collision collision = null;
 
+    private float timeGrabbed;
+
+    private int dashes = 0;
+
     private bool canMove = true;
     private bool canDash = true;
     private bool wallJumped = false;
     private bool bUseBetterJump = true;
     private bool canGrab = true;
-
-    private int dashes = 0;
-
+    
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
