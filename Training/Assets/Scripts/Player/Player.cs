@@ -21,6 +21,12 @@ public class Player : MonoBehaviour, ICharacter
     [SerializeField] private float dashDrag = 10f;
     [SerializeField] private float dashCooldown = .8f;
 
+    [Header("Grab")]
+    [SerializeField] private float grapMoveSpeed = 8f;
+    [SerializeField] private float maxTimeGrabbed = 2f;
+
+    private float timeGrabbed;
+
     [Header("Walljump")]
     [SerializeField] private float wallJumpForce = 10f;
 
@@ -30,6 +36,8 @@ public class Player : MonoBehaviour, ICharacter
     private bool canMove = true;
     private bool canDash = true;
     private bool wallJumped = false;
+    private bool bUseBetterJump = true;
+    private bool canGrab = true;
 
     private int dashes = 0;
 
@@ -37,6 +45,11 @@ public class Player : MonoBehaviour, ICharacter
     {
         rb = GetComponent<Rigidbody2D>();
         collision = GetComponent<Collision>();
+    }
+
+    private void Start()
+    {
+        maxTimeGrabbed *= 100;
     }
 
     void Update()
@@ -53,6 +66,9 @@ public class Player : MonoBehaviour, ICharacter
             if (canDash) {
                 dashes = 0;
             }
+
+            canGrab = true;
+            timeGrabbed = 0;
         }
 
         if (InputManager._I.keyJumping) {
@@ -71,6 +87,15 @@ public class Player : MonoBehaviour, ICharacter
             dashes = 1;
 
             Dash();
+        }
+
+        if (collision.isOnWall && !collision.isGrounded && InputManager._I.keyGrab && timeGrabbed <= maxTimeGrabbed) {
+            Grab();
+        }
+        else {
+            bUseBetterJump = true;
+            canMove = true;
+            rb.gravityScale = 2f;
         }
     }
 
@@ -109,6 +134,21 @@ public class Player : MonoBehaviour, ICharacter
         Jump(Vector2.right * wallJumpForce / 1.5f * wallJumpDir + Vector2.up * wallJumpForce / 1.2f);
     }
 
+    private void Grab()
+    {
+        if (InputManager._I.keyJumping) {
+            WallJump();
+        }
+
+        bUseBetterJump = false;
+        canMove = false;
+        rb.gravityScale = 0f;
+
+        rb.velocity = new Vector2(rb.velocity.x, InputManager._I.yAxis * grapMoveSpeed);
+
+        timeGrabbed++;
+    }
+
     private void Dash()
     {
         StartCoroutine(DisableMovement(.1f));
@@ -142,6 +182,9 @@ public class Player : MonoBehaviour, ICharacter
     /// </summary>
     private void BetterJump()
     {
+        if (!bUseBetterJump)
+            return;
+
         if (rb.velocity.y < 0) {
             rb.velocity += Vector2.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
         }

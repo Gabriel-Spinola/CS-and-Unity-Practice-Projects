@@ -303,6 +303,8 @@ MonoBehaviour:
   dashSpeed: 45
   dashDrag: 12
   dashCooldown: 0.2
+  grapMoveSpeed: 8
+  maxTimeGrabbed: 5
   wallJumpForce: 15
 --- !u!4 &120525006
 Transform:
