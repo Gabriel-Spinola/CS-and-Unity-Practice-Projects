@@ -8,6 +8,7 @@ public class Player : MonoBehaviour, ICharacter
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float lerpMoveSpeed = 8f;
     [SerializeField] private float friction = .2f;
 
     [Header("Jump")]
@@ -22,6 +23,7 @@ public class Player : MonoBehaviour, ICharacter
     private Collision collision = null;
 
     private bool canMove = true;
+    private bool wallJumped = false;
 
     private void Awake()
     {
@@ -35,6 +37,10 @@ public class Player : MonoBehaviour, ICharacter
 
         if (canMove)
             Movement();
+
+        if (collision.isGrounded) {
+            wallJumped = false;
+        }
 
         if (InputManager._I.keyJumping) {
             if (collision.isOnWall && !collision.isGrounded) {
@@ -53,7 +59,12 @@ public class Player : MonoBehaviour, ICharacter
             rb.velocity = new Vector2(moveSpeed * InputManager._I.xAxis, rb.velocity.y);
         }
         else {
-            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, friction), rb.velocity.y);
+            if (!wallJumped) {
+                rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, friction), rb.velocity.y);
+            }
+            else {
+                rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, friction - .12f), rb.velocity.y);
+            }
         }
     }
 
@@ -72,8 +83,9 @@ public class Player : MonoBehaviour, ICharacter
         StartCoroutine(DisableMovement(.2f));
 
         int wallJumpDir = collision.isOnRightWall ? -1 : collision.isOnLeftWall ? 1 : 0;
+        wallJumped = true;
 
-        Jump(Vector2.right * wallJumpForce * wallJumpDir + Vector2.up * wallJumpForce / 1.2f);
+        Jump(Vector2.right * wallJumpForce / 1.5f * wallJumpDir + Vector2.up * wallJumpForce / 1.2f);
     }
 
     /// <summary>
@@ -86,7 +98,7 @@ public class Player : MonoBehaviour, ICharacter
         if (rb.velocity.y < 0) {
             rb.velocity += Vector2.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
         }
-        else if (rb.velocity.y > 0 && !InputManager._I.keyJumpingHold) {
+        else if (rb.velocity.y > 0 && !InputManager._I.keyJumpingHold || wallJumped) {
             rb.velocity += Vector2.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
     }
