@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Collision))]
 public class Player : MonoBehaviour, ICharacter
 {
     [Header("Movement")]
@@ -18,10 +19,12 @@ public class Player : MonoBehaviour, ICharacter
     [SerializeField] private float wallJumpForce = 10f;
 
     private Rigidbody2D rb = null;
+    private Collision collision = null;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        collision = GetComponent<Collision>();
     }
 
     void Update()
@@ -29,7 +32,7 @@ public class Player : MonoBehaviour, ICharacter
         BetterJump();
         Movement();
 
-        if (InputManager._I.keyJumping) {
+        if (InputManager._I.keyJumping && collision.isGrounded) {
             Jump();
         }
     }
@@ -51,7 +54,7 @@ public class Player : MonoBehaviour, ICharacter
 
     private void WallJump()
     {
-
+        //int wallJumpDir = collision;
     }
 
     /// <summary>
