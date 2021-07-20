@@ -49,6 +49,11 @@ public class Player : MonoBehaviour, ICharacter
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
 
+    private void WallJump()
+    {
+
+    }
+
     /// <summary>
     /// if falling, add fallMultiplier
     /// if jumping and not holding spacebar, increase gravity to peform a small jump

@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 120525008}
   - component: {fileID: 120525007}
   - component: {fileID: 120525005}
+  - component: {fileID: 120525010}
   m_Layer: 0
   m_Name: '[Player]'
   m_TagString: Untagged
@@ -190,6 +191,7 @@ MonoBehaviour:
   jumpForce: 10
   fallMultiplier: 2.5
   lowJumpMultiplier: 5
+  wallJumpForce: 0
 --- !u!4 &120525006
 Transform:
   m_ObjectHideFlags: 0
@@ -301,6 +303,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &120525010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120525004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4d2be90cbbd1994293a059cc699c947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rightColOffset: {x: 0, y: 0}
+  leftColOffset: {x: 0, y: 0}
+  bottomColPointA: {x: 0, y: 0, z: 0}
+  bottomColPointB: {x: 0, y: 0}
+  horizontalColRadius: 0.5
+  bottomColRadius: 0.5
+  isOnRightWall: 0
+  isOnLeftWall: 0
+  isGrounded: 0
 --- !u!1 &189785027
 GameObject:
   m_ObjectHideFlags: 0
