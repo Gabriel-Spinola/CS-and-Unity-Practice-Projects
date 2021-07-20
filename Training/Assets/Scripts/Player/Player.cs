@@ -21,6 +21,8 @@ public class Player : MonoBehaviour, ICharacter
     private Rigidbody2D rb = null;
     private Collision collision = null;
 
+    private bool canMove = true;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -30,10 +32,18 @@ public class Player : MonoBehaviour, ICharacter
     void Update()
     {
         BetterJump();
-        Movement();
 
-        if (InputManager._I.keyJumping && collision.isGrounded) {
-            Jump();
+        if (canMove)
+            Movement();
+
+        if (InputManager._I.keyJumping) {
+            if (collision.isOnWall && !collision.isGrounded) {
+                WallJump();
+            }
+
+            if (collision.isGrounded) {
+                Jump();
+            }
         }
     }
 
@@ -51,10 +61,19 @@ public class Player : MonoBehaviour, ICharacter
     {
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
+    
+    private void Jump(Vector2 jumpDir)
+    {
+        rb.velocity = jumpDir;
+    }
 
     private void WallJump()
     {
-        //int wallJumpDir = collision;
+        StartCoroutine(DisableMovement(.2f));
+
+        int wallJumpDir = collision.isOnRightWall ? -1 : collision.isOnLeftWall ? 1 : 0;
+
+        Jump(Vector2.right * wallJumpForce * wallJumpDir + Vector2.up * wallJumpForce / 1.2f);
     }
 
     /// <summary>
@@ -70,6 +89,15 @@ public class Player : MonoBehaviour, ICharacter
         else if (rb.velocity.y > 0 && !InputManager._I.keyJumpingHold) {
             rb.velocity += Vector2.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
+    }
+
+    private IEnumerator DisableMovement(float time)
+    {
+        canMove = false;
+
+        yield return new WaitForSeconds(time);
+
+        canMove = true;
     }
 
     public void TakeDamage(float damage)
