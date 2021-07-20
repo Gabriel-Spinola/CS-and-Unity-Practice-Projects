@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
@@ -28,5 +27,10 @@ public class InputManager : MonoBehaviour
 
         keyJumping = Input.GetKeyDown(KeyCode.Space);
         keyJumpingHold = Input.GetKey(KeyCode.Space);
+
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.RightAlt))
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+#endif
     }
 }
