@@ -9,6 +9,7 @@ public class InputManager : MonoBehaviour
 
     public bool keyJumping;
     public bool keyJumpingHold;
+    public bool keyDash;
 
     private void Awake()
     {
@@ -27,6 +28,8 @@ public class InputManager : MonoBehaviour
 
         keyJumping = Input.GetKeyDown(KeyCode.Space);
         keyJumpingHold = Input.GetKey(KeyCode.Space);
+
+        keyDash = Input.GetKeyDown(KeyCode.LeftShift);
 
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.RightAlt))

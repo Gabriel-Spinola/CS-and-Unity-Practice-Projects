@@ -11,8 +11,8 @@ public class Collision : MonoBehaviour
     [SerializeField] private Vector2 rightColOffset;
     [SerializeField] private Vector2 leftColOffset;
 
+    [Range(0f, 1f)]
     [SerializeField] private float horizontalColRadius = .5f;
-    [SerializeField] private float bottomColRadius = .5f;
 
     [Header("Vertical Collision")]
     [SerializeField] private Vector2 bottomColSize;
