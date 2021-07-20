@@ -300,6 +300,9 @@ MonoBehaviour:
   jumpForce: 10
   fallMultiplier: 2.5
   lowJumpMultiplier: 5
+  dashSpeed: 45
+  dashDrag: 12
+  dashCooldown: 0.8
   wallJumpForce: 15
 --- !u!4 &120525006
 Transform:
@@ -430,8 +433,7 @@ MonoBehaviour:
   rightColOffset: {x: 0.18, y: 0}
   leftColOffset: {x: -0.18, y: 0}
   horizontalColRadius: 0.4
-  bottomColRadius: 10
-  bottomColSize: {x: 0.9, y: 0.1}
+  bottomColSize: {x: 0.98, y: 0.1}
   bottomColOffset: {x: 0, y: -0.45}
   isOnRightWall: 0
   isOnLeftWall: 0

@@ -16,6 +16,11 @@ public class Player : MonoBehaviour, ICharacter
     [SerializeField] private float fallMultiplier = 2.5f;
     [SerializeField] private float lowJumpMultiplier = 2;
 
+    [Header("Dash")]
+    [SerializeField] private float dashSpeed = 20f;
+    [SerializeField] private float dashDrag = 10f;
+    [SerializeField] private float dashCooldown = .8f;
+
     [Header("Walljump")]
     [SerializeField] private float wallJumpForce = 10f;
 
@@ -23,6 +28,8 @@ public class Player : MonoBehaviour, ICharacter
     private Collision collision = null;
 
     private bool canMove = true;
+    private bool canDash = true;
+    private bool isDashing = false;
     private bool wallJumped = false;
 
     private void Awake()
@@ -35,8 +42,9 @@ public class Player : MonoBehaviour, ICharacter
     {
         BetterJump();
 
-        if (canMove)
+        if (canMove) {
             Movement();
+        }
 
         if (collision.isGrounded) {
             wallJumped = false;
@@ -51,6 +59,12 @@ public class Player : MonoBehaviour, ICharacter
                 Jump();
             }
         }
+
+        DashCounter();
+
+        if (InputManager._I.keyDash && canDash) {
+            Dash();
+        }
     }
 
     private void Movement()
@@ -63,7 +77,7 @@ public class Player : MonoBehaviour, ICharacter
                 rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, friction), rb.velocity.y);
             }
             else {
-                rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, friction - .12f), rb.velocity.y);
+                rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, friction - .17f), rb.velocity.y);
             }
         }
     }
@@ -88,6 +102,27 @@ public class Player : MonoBehaviour, ICharacter
         Jump(Vector2.right * wallJumpForce / 1.5f * wallJumpDir + Vector2.up * wallJumpForce / 1.2f);
     }
 
+    private void Dash()
+    {
+        StartCoroutine(DisableMovement(.1f));
+
+        rb.velocity = Vector2.right * dashSpeed * InputManager._I.xAxis + Vector2.up * dashSpeed * InputManager._I.yAxis;
+
+        StartCoroutine(DisableDash(.2f));
+    }
+
+    private void DashCounter()
+    {
+        if (rb.velocity.x > moveSpeed || rb.velocity.x < -moveSpeed || rb.velocity.y > jumpForce || rb.velocity.y < -jumpForce) {
+            if (!canDash) {
+                rb.drag = dashDrag;
+            }
+        }
+        else {
+            rb.drag = 0f;
+        }
+    }
+
     /// <summary>
     /// if falling, add fallMultiplier
     /// if jumping and not holding spacebar, increase gravity to peform a small jump
@@ -101,6 +136,15 @@ public class Player : MonoBehaviour, ICharacter
         else if (rb.velocity.y > 0 && !InputManager._I.keyJumpingHold || wallJumped) {
             rb.velocity += Vector2.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
+    }
+
+    private IEnumerator DisableDash(float cooldown)
+    {
+        canDash = false;
+
+        yield return new WaitForSeconds(cooldown);
+
+        canDash = true;
     }
 
     private IEnumerator DisableMovement(float time)

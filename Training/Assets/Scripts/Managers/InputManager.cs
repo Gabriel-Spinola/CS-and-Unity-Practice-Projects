@@ -5,7 +5,7 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager _I;
 
-    public float xAxis;
+    public float xAxis, yAxis;
 
     public bool keyJumping;
     public bool keyJumpingHold;
@@ -25,6 +25,7 @@ public class InputManager : MonoBehaviour
     private void Update()
     {
         xAxis = Input.GetAxisRaw("Horizontal");
+        yAxis = Input.GetAxisRaw("Vertical");
 
         keyJumping = Input.GetKeyDown(KeyCode.Space);
         keyJumpingHold = Input.GetKey(KeyCode.Space);
