@@ -297,12 +297,12 @@ MonoBehaviour:
   moveSpeed: 10
   lerpMoveSpeed: 8
   friction: 0.2
-  jumpForce: 10
-  fallMultiplier: 2.5
+  jumpForce: 12
+  fallMultiplier: 3
   lowJumpMultiplier: 5
   dashSpeed: 45
   dashDrag: 12
-  dashCooldown: 0.8
+  dashCooldown: 0.2
   wallJumpForce: 15
 --- !u!4 &120525006
 Transform:

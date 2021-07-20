@@ -29,8 +29,9 @@ public class Player : MonoBehaviour, ICharacter
 
     private bool canMove = true;
     private bool canDash = true;
-    private bool isDashing = false;
     private bool wallJumped = false;
+
+    private int dashes = 0;
 
     private void Awake()
     {
@@ -48,6 +49,10 @@ public class Player : MonoBehaviour, ICharacter
 
         if (collision.isGrounded) {
             wallJumped = false;
+
+            if (canDash) {
+                dashes = 0;
+            }
         }
 
         if (InputManager._I.keyJumping) {
@@ -62,7 +67,9 @@ public class Player : MonoBehaviour, ICharacter
 
         DashCounter();
 
-        if (InputManager._I.keyDash && canDash) {
+        if (InputManager._I.keyDash && canDash && dashes < 1) {
+            dashes = 1;
+
             Dash();
         }
     }
@@ -106,15 +113,20 @@ public class Player : MonoBehaviour, ICharacter
     {
         StartCoroutine(DisableMovement(.1f));
 
-        rb.velocity = Vector2.right * dashSpeed * InputManager._I.xAxis + Vector2.up * dashSpeed * InputManager._I.yAxis;
+        if (InputManager._I.xAxis != 0 || InputManager._I.yAxis != 0) {
+            rb.velocity = Vector2.right * dashSpeed * InputManager._I.xAxis + Vector2.up * dashSpeed * InputManager._I.yAxis;
+        }
+        else {
+            rb.velocity = Vector2.right * dashSpeed + Vector2.up * rb.velocity.y;
+        }
 
-        StartCoroutine(DisableDash(.2f));
+        StartCoroutine(DisableDash(dashCooldown));
     }
 
     private void DashCounter()
     {
         if (rb.velocity.x > moveSpeed || rb.velocity.x < -moveSpeed || rb.velocity.y > jumpForce || rb.velocity.y < -jumpForce) {
-            if (!canDash) {
+            if (dashes >= 1 || !canDash) {
                 rb.drag = dashDrag;
             }
         }
